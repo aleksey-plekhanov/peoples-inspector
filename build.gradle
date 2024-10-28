@@ -32,6 +32,7 @@ dependencies {
 	implementation 'org.flywaydb:flyway-database-derby'
 	implementation 'org.flywaydb:flyway-database-postgresql'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.apache.derby:derby'
@@ -43,12 +44,12 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
-	outputs.dir snippetsDir
-	useJUnitPlatform()
-}
+// tasks.named('test') {
+// 	outputs.dir snippetsDir
+// 	useJUnitPlatform()
+// }
 
-tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
-}
+// tasks.named('asciidoctor') {
+// 	inputs.dir snippetsDir
+// 	dependsOn test
+// }
