@@ -17,6 +17,10 @@ public class DemoApplication implements CommandLineRunner {
 	private TypeViolationRepository repositoryType;
 	
 	public static void main(String[] args) {
+		// для отладки
+		// System.setProperty("java.awt.headless", "false");
+		// System.setProperty("spring.flyway.enabled", "false");
+		// System.setProperty("spring.flyway.baseline-on-migrate", "true");
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
@@ -25,7 +29,6 @@ public class DemoApplication implements CommandLineRunner {
 		System.out.println(repositoryType.findAll());
 
 		// для отладки
-		// System.setProperty("java.awt.headless", "false");
 		// java.awt.Desktop.getDesktop().browse(new URI("http://localhost:8000"));
 	}
 
