@@ -1,30 +1,32 @@
 package traffic_id.demo;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import traffic_id.demo.entity.Product;
-import traffic_id.demo.repository.ProductRepository;
+import traffic_id.demo.model.*;
+import traffic_id.demo.repository.*;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
 	@Autowired
-	private ProductRepository repository;
-
+	private TypeViolationRepository repositoryType;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		Product product = new Product(null, "name");
-		repository.save(product);
+		System.out.println(repositoryType.findAll());
 
-		java.util.List<Product> all = repository.findAll();
-		System.out.println(all);
+		// для отладки
+		// System.setProperty("java.awt.headless", "false");
+		// java.awt.Desktop.getDesktop().browse(new URI("http://localhost:8000"));
 	}
 
 }

@@ -11,12 +11,12 @@ public class MainController {
         return "<h2> Привет Всем! </h2>";
     }
 
-    @GetMapping("/user")
+    @GetMapping("/hello_user")
     public String user(){
         return "<h2> Привет, Пользователь! </h2>";
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/hello_admin")
     public String admin(){
         return "<h2> Привет, Админ! </h2>";
     }

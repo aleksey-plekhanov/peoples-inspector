@@ -6,22 +6,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import traffic_id.demo.entity.Product;
-import traffic_id.demo.repository.ProductRepository;
-
+import traffic_id.demo.model.District;
+import traffic_id.demo.repository.DistrictRepository;
 
 @RestController
-@RequestMapping("products")
-public class ProductController {
+@RequestMapping("district")
+public class DistrictController {
 
-    private final ProductRepository repository;
+    private final DistrictRepository repository;
 
-    public ProductController(ProductRepository repository) {
+    public DistrictController(DistrictRepository repository) {
         this.repository = repository;
     }
 
     @GetMapping
-    public List<Product> getAll() {
+    public List<District> getAll() {
         return repository.findAll();
     }
 }
