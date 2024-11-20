@@ -1,6 +1,6 @@
 package traffic_id.demo.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,7 +25,7 @@ public class User {
     private String patronymic;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_users_data", nullable = false, unique=true)
+    @JoinColumn(name = "Данные")
     private UserData data;
 
     @Column(nullable = false, columnDefinition="date")

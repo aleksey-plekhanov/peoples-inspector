@@ -42,12 +42,12 @@ CREATE TABLE IF NOT EXISTS  public.application (
     "Заявитель" integer NOT NULL,
     "Нарушение" integer[] NOT NULL,
     "Данные" integer NOT NULL,
-    "Дата поступления" date DEFAULT now() NOT NULL,
+    "Время поступления" timestamp DEFAULT now() NOT NULL,
     "Район" integer NOT NULL,
     "Статус" integer NOT NULL,
     "Модератор" integer,
     "Комментарий модератора" text,
-    "Дата проверки" date
+    "Время проверки" timestamp
 );
 
 
@@ -194,8 +194,8 @@ ALTER SEQUENCE public.district_id_district_seq OWNED BY public.district.id_distr
 CREATE TABLE IF NOT EXISTS  public.moderator (
     id_moderator integer NOT NULL,
     "Пользователь" integer NOT NULL,
-    "Дата начала должности" date DEFAULT now() NOT NULL,
-    "Дата окончания должности" date
+    "Дата начала должности" timestamp DEFAULT now() NOT NULL,
+    "Дата окончания должности" timestamp
 );
 
 
@@ -341,7 +341,7 @@ CREATE TABLE IF NOT EXISTS  public."users" (
     "Имя" varchar(50) NOT NULL,
     "Отчество" varchar(50),
     "Данные" integer NOT NULL,
-    "Дата регистрации" date DEFAULT now() NOT NULL,
+    "Дата регистрации" timestamp DEFAULT now() NOT NULL,
     CONSTRAINT empty_name CHECK (("Имя" <> ''::text)),
     CONSTRAINT empty_surname CHECK (("Фамилия" <> ''::text))
 );
@@ -371,9 +371,8 @@ CREATE TABLE IF NOT EXISTS  public.user_data (
     "Аватар" bytea,
     CONSTRAINT empty_email CHECK (("Электронная почта" <> ''::text)),
     CONSTRAINT empty_login CHECK (("Логин" <> ''::text)),
-    CONSTRAINT empty_password CHECK (("Пароль" <> ''::text)),
-    CONSTRAINT weak_password CHECK (((("Пароль" ~ similar_to_escape('*[А-Я]*'::text)) OR ("Пароль" ~ similar_to_escape('*[A-Z]*'::text))) AND ("Пароль" ~ similar_to_escape('*[0-9]*'::text)))),
-    CONSTRAINT wrong_email CHECK (("Электронная почта" ~ similar_to_escape('*@*.*'::text)))
+    CONSTRAINT empty_password CHECK (("Пароль" <> ''::text))
+    --CONSTRAINT weak_password CHECK (((("Пароль" ~ similar_to_escape('*[А-Я]*'::text)) OR ("Пароль" ~ similar_to_escape('*[A-Z]*'::text))) AND ("Пароль" ~ similar_to_escape('*[0-9]*'::text))))
 );
 
 
@@ -558,7 +557,7 @@ ALTER TABLE ONLY public.violation ALTER COLUMN id_violation SET DEFAULT nextval(
 -- Data for Name: application; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.application (id_application, "Заявитель", "Нарушение", "Данные", "Дата поступления", "Район", "Статус", "Модератор", "Комментарий модератора", "Дата проверки") FROM stdin;
+COPY public.application (id_application, "Заявитель", "Нарушение", "Данные", "Время поступления", "Район", "Статус", "Модератор", "Комментарий модератора", "Время проверки") FROM stdin;
 \.
 
 

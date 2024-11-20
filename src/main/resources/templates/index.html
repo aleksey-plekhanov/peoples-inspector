@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 
 <head>
   <meta charset="utf-8">
@@ -9,23 +9,24 @@
   <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="../static/img/favicon.png" rel="icon">
-  <link href="../static/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="../static/img/favicon.png" rel="icon" th:href="@{/img/favicon.png}">
+  <link href="../static/img/apple-touch-icon.png" rel="apple-touch-icon" th:href="@{/img/apple-touch-icon.png}">
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com" rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin th:href="@{https://fonts.gstatic.com}">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"
+  th:href="@{https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap}">
 
   <!-- Vendor CSS Files -->
-  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../static/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="../static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+  <link href="../static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}">
+  <link href="../static/vendor/aos/aos.css" rel="stylesheet" th:href="@{/vendor/aos/aos.css}">
+  <link href="../static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" th:href="@{/vendor/glightbox/css/glightbox.min.css}">
+  <link href="../static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" th:href="@{/vendor/swiper/swiper-bundle.min.css}">
 
   <!-- Main CSS File -->
-  <link href="../static/css/main.css" rel="stylesheet">
+  <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}">
 
   <!-- =======================================================
   * Template Name: iLanding
@@ -41,7 +42,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+      <a href="index.html" th:href="@{index.html}" class="logo d-flex align-items-center me-auto me-xl-0">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="../static/img/logo.png" alt=""> -->
         <h1 class="sitename">Народный инспектор</h1>
@@ -49,15 +50,15 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="#hero" class="active">Домой</a></li>
-          <li><a href="#about">О нас</a></li>
-          <li><a href="#features">Преимущества</a></li>
-          <li><a href="#features-cards">Как работает?</a></li>
-          <li><a href="#faq">Q&A</a></li>
+          <li><a href="#hero" th:href="@{#hero}" class="active">Домой</a></li>
+          <li><a href="#about" th:href="@{#about}">О нас</a></li>
+          <li><a href="#features" th:href="@{#features}">Преимущества</a></li>
+          <li><a href="#features-cards" th:href="@{#features-cards}">Как работает?</a></li>
+          <li><a href="#faq" th:href="@{#faq}">Q&A</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-      <a class="btn-getstarted" href="index.html#about">Личный кабинет</a>
+      <a class="btn-getstarted" href="index.html#about"  th:href="@{index.html#about}">Личный кабинет</a>
     </div>
   </header>
 
@@ -87,8 +88,9 @@
               </p>
 
               <div class="hero-buttons">
-                <a href="#about" class="btn btn-primary me-0 me-sm-2 mx-1">Перейти в ЛК</a>
-                <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="btn btn-link mt-2 mt-sm-0 glightbox">
+                <a href="#about" th:href="@{#about}" class="btn btn-primary me-0 me-sm-2 mx-1">Перейти в ЛК</a>
+                <!-- <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" th:href="@{https://www.youtube.com/watch?v=Y7f98aduVJ8}" class="btn btn-link mt-2 mt-sm-0 glightbox"> -->
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" th:href="@{https://www.youtube.com/watch?v=dQw4w9WgXcQ}" class="btn btn-link mt-2 mt-sm-0 glightbox">
                   <i class="bi bi-play-circle me-1"></i>
                   Посмотреть видео
                 </a>
@@ -98,15 +100,15 @@
 
           <div class="col-lg-6">
             <div class="hero-image" data-aos="zoom-out" data-aos-delay="300">
-              <img src="../static/img/illustration-1.webp" alt="Hero Image" class="img-fluid">
+              <img src="../static/img/illustration-1.webp" th:src="@{img/illustration-1.webp}" alt="Hero Image" class="img-fluid">
 
               <div class="customers-badge">
                 <div class="customer-avatars">
-                  <img src="../static/img/avatar-1.webp" alt="Customer 1" class="avatar">
-                  <img src="../static/img/avatar-2.webp" alt="Customer 2" class="avatar">
-                  <img src="../static/img/avatar-3.webp" alt="Customer 3" class="avatar">
-                  <img src="../static/img/avatar-4.webp" alt="Customer 4" class="avatar">
-                  <img src="../static/img/avatar-5.webp" alt="Customer 5" class="avatar">
+                  <img src="../static/img/avatar-1.webp" th:src="@{img/avatar-1.webp}" alt="Customer 1" class="avatar">
+                  <img src="../static/img/avatar-2.webp" th:src="@{img/avatar-2.webp}" alt="Customer 2" class="avatar">
+                  <img src="../static/img/avatar-3.webp" th:src="@{img/avatar-3.webp}" alt="Customer 3" class="avatar">
+                  <img src="../static/img/avatar-4.webp" th:src="@{img/avatar-4.webp}" alt="Customer 4" class="avatar">
+                  <img src="../static/img/avatar-5.webp" th:src="@{img/avatar-5.webp}" alt="Customer 5" class="avatar">
                   <span class="avatar more">12+</span>
                 </div>
                 <p class="mb-0 mt-2">12,000+ lorem ipsum dolor sit amet consectetur adipiscing elit</p>
@@ -199,7 +201,7 @@
               <div class="row gy-4">
                 <div class="col-lg-5">
                   <div class="profile d-flex align-items-center gap-3">
-                    <img src="../static/img/avatar-1.webp" alt="CEO Profile" class="profile-image">
+                    <img src="../static/img/avatar-1.webp" th:src="@{img/avatar-1.webp}" alt="CEO Profile" class="profile-image">
                     <div>
                       <h4 class="profile-name">Mario Smith</h4>
                       <p class="profile-position">CEO &amp; Founder</p>
@@ -222,8 +224,8 @@
           <div class="col-xl-6" data-aos="fade-up" data-aos-delay="300">
             <div class="image-wrapper">
               <div class="images position-relative" data-aos="zoom-out" data-aos-delay="400">
-                <img src="../static/img/about-5.webp" alt="Business Meeting" class="img-fluid main-image rounded-4">
-                <img src="../static/img/about-2.webp" alt="Team Discussion" class="img-fluid small-image rounded-4">
+                <img src="../static/img/about-5.webp" th:src="@{img/about-5.webp}" alt="Business Meeting" class="img-fluid main-image rounded-4">
+                <img src="../static/img/about-2.webp" th:src="@{img/img/about-2.webp}" alt="Team Discussion" class="img-fluid small-image rounded-4">
               </div>
               <div class="experience-badge floating">
                 <h3>15+ <span>Years</span></h3>
@@ -286,7 +288,7 @@
 
           <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
             <div class="phone-mockup text-center">
-              <img src="../static/img/phone-app-screen.webp" alt="Phone Mockup" class="img-fluid">
+              <img src="../static/img/phone-app-screen.webp" th:src="@{img/phone-app-screen.webp}" alt="Phone Mockup" class="img-fluid">
             </div>
           </div><!-- End Phone Mockup -->
 
@@ -388,7 +390,7 @@
             <h2 class="faq-title">Остались вопросы? Посмотрите FAQ</h2>
             <p class="faq-description">Maecenas tempus tellus eget condimentum rhoncus sem quam semper libero sit amet adipiscing sem neque sed ipsum.</p>
             <div class="faq-arrow d-none d-lg-block" data-aos="fade-up" data-aos-delay="200">
-              <svg class="faq-arrow" width="200" height="211" viewBox="0 0 200 211" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg class="faq-arrow" width="200" height="211" viewBox="0 0 200 211" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:th="http://www.w3.org/2000/svg">
                 <path d="M198.804 194.488C189.279 189.596 179.529 185.52 169.407 182.07L169.384 182.049C169.227 181.994 169.07 181.939 168.912 181.884C166.669 181.139 165.906 184.546 167.669 185.615C174.053 189.473 182.761 191.837 189.146 195.695C156.603 195.912 119.781 196.591 91.266 179.049C62.5221 161.368 48.1094 130.695 56.934 98.891C84.5539 98.7247 112.556 84.0176 129.508 62.667C136.396 53.9724 146.193 35.1448 129.773 30.2717C114.292 25.6624 93.7109 41.8875 83.1971 51.3147C70.1109 63.039 59.63 78.433 54.2039 95.0087C52.1221 94.9842 50.0776 94.8683 48.0703 94.6608C30.1803 92.8027 11.2197 83.6338 5.44902 65.1074C-1.88449 41.5699 14.4994 19.0183 27.9202 1.56641C28.6411 0.625793 27.2862 -0.561638 26.5419 0.358501C13.4588 16.4098 -0.221091 34.5242 0.896608 56.5659C1.8218 74.6941 14.221 87.9401 30.4121 94.2058C37.7076 97.0203 45.3454 98.5003 53.0334 98.8449C47.8679 117.532 49.2961 137.487 60.7729 155.283C87.7615 197.081 139.616 201.147 184.786 201.155L174.332 206.827C172.119 208.033 174.345 211.287 176.537 210.105C182.06 207.125 187.582 204.122 193.084 201.144C193.346 201.147 195.161 199.887 195.423 199.868C197.08 198.548 193.084 201.144 195.528 199.81C196.688 199.192 197.846 198.552 199.006 197.935C200.397 197.167 200.007 195.087 198.804 194.488ZM60.8213 88.0427C67.6894 72.648 78.8538 59.1566 92.1207 49.0388C98.8475 43.9065 106.334 39.2953 114.188 36.1439C117.295 34.8947 120.798 33.6609 124.168 33.635C134.365 33.5511 136.354 42.9911 132.638 51.031C120.47 77.4222 86.8639 93.9837 58.0983 94.9666C58.8971 92.6666 59.783 90.3603 60.8213 88.0427Z" fill="currentColor"></path>
               </svg>
             </div>
@@ -458,7 +460,7 @@
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
+          <a href="index.html" th:href="@{index.html}"class="logo d-flex align-items-center">
             <span class="sitename">Народный инспектор</span>
           </a>
           <div class="footer-contact pt-3">
@@ -476,22 +478,22 @@
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Useful Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
+            <li><a href="#" th:href="@{#}">Home</a></li>
+            <li><a href="#" th:href="@{#}">About us</a></li>
+            <li><a href="#" th:href="@{#}">Services</a></li>
+            <li><a href="#" th:href="@{#}">Terms of service</a></li>
+            <li><a href="#" th:href="@{#}">Privacy policy</a></li>
           </ul>
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Our Services</h4>
           <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
+            <li><a href="#" th:href="@{#}">Web Design</a></li>
+            <li><a href="#" th:href="@{#}">Web Development</a></li>
+            <li><a href="#" th:href="@{#}">Product Management</a></li>
+            <li><a href="#" th:href="@{#}">Marketing</a></li>
+            <li><a href="#" th:href="@{#}">Graphic Design</a></li>
           </ul>
         </div>
       </div>
@@ -504,25 +506,25 @@
         <!-- You can delete the links only if you've purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        Designed by <a href="https://bootstrapmade.com/" th:href="@{https://bootstrapmade.com/}">BootstrapMade</a>
       </div>
     </div>
 
   </footer>
 
   <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" th:href="@{#}" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../static/vendor/php-email-form/validate.js"></script>
-  <script src="../static/vendor/aos/aos.js"></script>
-  <script src="../static/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../static/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../static/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js" th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script src="../static/vendor/php-email-form/validate.js" th:src="@{vendor/php-email-form/validate.js}"></script>
+  <script src="../static/vendor/aos/aos.js" th:src="@{vendor/aos/aos.js}"></script>
+  <script src="../static/vendor/glightbox/js/glightbox.min.js" th:src="@{vendor/glightbox/js/glightbox.min.js}"></script>
+  <script src="../static/vendor/swiper/swiper-bundle.min.js" th:src="@{vendor/swiper/swiper-bundle.min.js}"></script>
+  <script src="../static/vendor/purecounter/purecounter_vanilla.js" th:src="@{vendor/purecounter/purecounter_vanilla.js}"></script>
 
   <!-- Main JS File -->
-  <script src="../static/js/main.js"></script>
+  <script src="../static/js/main.js" th:src="@{js/main.js}"></script>
 
 </body>
 

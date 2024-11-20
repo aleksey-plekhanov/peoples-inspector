@@ -1,6 +1,14 @@
 package traffic_id.demo.model;
 
+import java.sql.Types;
+import java.util.Arrays;
+import java.util.List;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 //@Table(name = "user_data", schema = "traffic_offensive")
@@ -14,21 +22,36 @@ public class UserData {
     @Column(name="Логин", nullable = false, columnDefinition="VARCHAR(128)", unique=true)
     private String login;
 
+    @Size(min=8, message = "Не меньше 8 знаков")
     @Column(name="Пароль", nullable = false, columnDefinition="VARCHAR(128)")
     private String password;
 
     @Column(name="Электронная почта", nullable = false, columnDefinition="VARCHAR(128)", unique=true)
     private String email;
 
-    @Lob
-    @Column(name="Аватар", nullable = false, columnDefinition="bytea")
-    private String avatar;
+    @JdbcTypeCode(Types.BINARY)
+    @Column(name="Аватар", columnDefinition="bytea")
+    private byte[] avatar;
 
-    public UserData(Integer id_users_data, String login, String password, String email) {
+    @Transient
+    private String passwordConfirm;
+
+    // @Transient
+    // private List<String> roles;
+
+    @Column(name="Роль", columnDefinition="VARCHAR(50)")
+    private String roles;
+
+    @OneToOne(mappedBy = "data")
+    private User user;
+
+    public UserData(Integer id_users_data, String login, String password, String email, byte[] avatar, String roles) {
         this.id_users_data = id_users_data;
         this.login = login;
         this.password = password;
         this.email = email;
+        this.avatar = avatar;
+        this.roles = roles;
     }
 
     public UserData() {
@@ -58,6 +81,14 @@ public class UserData {
         this.password = password;
     }
 
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -66,17 +97,33 @@ public class UserData {
         this.email = email;
     }
 
-    public String getAvatar() {
+    public byte[] getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
+    }
+
+    public User getUser() {
+        return user;
+    }
+    
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     @Override
     public String toString() {
         return "UsersData [id_users_data=" + id_users_data + ", login=" + login + ", password=" + password + ", email="
-                + email + ", avatar=" + avatar + "]";
+                + email + ", avatar=" + Arrays.toString(avatar) + "]";
     }
 }

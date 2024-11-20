@@ -6,4 +6,7 @@ import traffic_id.demo.model.UserData;
 
 public interface UserDataRepository extends JpaRepository<UserData, Integer> {
 
+    UserData findByLogin(String login);
+
+    UserData findByEmail(String email);
 }
