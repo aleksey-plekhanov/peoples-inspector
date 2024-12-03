@@ -13,9 +13,12 @@ import traffic_id.demo.repository.*;
 public class DemoApplication implements CommandLineRunner {
 
     @Autowired
-    private TypeViolationRepository repositoryType;
+    private ViolationTypeRepository repositoryType;
 
-    private static final boolean isDebug = true;
+    // Менять вручную
+    private static final boolean isDebug = false;
+    // для создания билда: 
+    // gradlew build && docker-compose build && docker-compose up -d
 
     public static void main(String[] args) {
         if (isDebug) {

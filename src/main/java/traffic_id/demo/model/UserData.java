@@ -2,22 +2,19 @@ package traffic_id.demo.model;
 
 import java.sql.Types;
 import java.util.Arrays;
-import java.util.List;
 
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 @Entity
-//@Table(name = "user_data", schema = "traffic_offensive")
 @Table(name = "user_data")
 public class UserData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_users_data;
+    private Integer id_user_data;
 
     @Column(name="Логин", nullable = false, columnDefinition="VARCHAR(128)", unique=true)
     private String login;
@@ -36,9 +33,6 @@ public class UserData {
     @Transient
     private String passwordConfirm;
 
-    // @Transient
-    // private List<String> roles;
-
     @Column(name="Роль", columnDefinition="VARCHAR(50)")
     private String roles;
 
@@ -46,7 +40,7 @@ public class UserData {
     private User user;
 
     public UserData(Integer id_users_data, String login, String password, String email, byte[] avatar, String roles) {
-        this.id_users_data = id_users_data;
+        this.id_user_data = id_users_data;
         this.login = login;
         this.password = password;
         this.email = email;
@@ -58,11 +52,11 @@ public class UserData {
     }
 
     public Integer getId() {
-        return id_users_data;
+        return id_user_data;
     }
 
     public void setId(Integer id_users_data) {
-        this.id_users_data = id_users_data;
+        this.id_user_data = id_users_data;
     }
 
     public String getLogin() {
@@ -123,7 +117,8 @@ public class UserData {
 
     @Override
     public String toString() {
-        return "UsersData [id_users_data=" + id_users_data + ", login=" + login + ", password=" + password + ", email="
-                + email + ", avatar=" + Arrays.toString(avatar) + "]";
+        return "UserData [id_user_data=" + id_user_data + ", login=" + login + ", password=" + password + ", email="
+                + email + ", avatar=" + Arrays.toString(avatar) + ", roles=" + roles + ", user=" + user + "]";
     }
+
 }

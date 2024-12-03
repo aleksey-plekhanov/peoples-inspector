@@ -7,7 +7,6 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
-//@Table(name = "user", schema = "traffic_offensive")
 @Table(name = "users")
 public class User {
 
@@ -28,11 +27,14 @@ public class User {
     @JoinColumn(name = "Данные")
     private UserData data;
 
-    @Column(nullable = false, columnDefinition="date")
+    @Column(name = "Дата регистрации", nullable = true, columnDefinition="date")
     private Date registration;
 
     @OneToMany(mappedBy = "user")
     private Set<Moderator> moderators = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Application> applications = new LinkedHashSet<>();
 
     public User(Integer id_user, String surname, String name, String patronymic, UserData data, Date registration) {
         this.id_user = id_user;
@@ -105,6 +107,7 @@ public class User {
     @Override
     public String toString() {
         return "User [id_user=" + id_user + ", surname=" + surname + ", name=" + name + ", patronymic=" + patronymic
-                + ", data=" + data + ", registration=" + registration + "]";
+                + ", data=" + data + ", registration=" + registration + ", moderators=" + moderators + ", applications="
+                + applications + "]";
     }
 }

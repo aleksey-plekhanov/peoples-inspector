@@ -1,4 +1,4 @@
-INSERT INTO traffic_offensive.public.type_violation (Вид) VALUES ('Временное название');
+INSERT INTO traffic_offensive.public.violation_type (Вид) VALUES ('Временное название');
 
 -- INSERT INTO private.violation (Статья, Название, Наказание, Вид) VALUES ('12.1 ч.1', 'Управление транспортным средством, не зарегистрированным в установленном порядке', '500 – 800 руб.', 1);
 -- INSERT INTO private.violation (Статья, Название, Наказание, Вид) VALUES ('12.1 ч.11', 'Повторное управление транспортным средством, не зарегистрированным в установленном порядке', '5 000 руб. или ЛП 1-3 месяцев', 1);

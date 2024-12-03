@@ -2,26 +2,34 @@ package traffic_id.demo.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import traffic_id.demo.model.Violation;
+import traffic_id.demo.model.ViolationType;
 import traffic_id.demo.repository.ViolationRepository;
+import traffic_id.demo.repository.ViolationTypeRepository;
 
 
 @RestController
 @RequestMapping("violation")
 public class ViolationController {
 
-    private final ViolationRepository repository;
+    @Autowired
+    private ViolationRepository repViolation;
 
-    public ViolationController(ViolationRepository repository) {
-        this.repository = repository;
+    @Autowired
+    private ViolationTypeRepository repViolationType;
+
+    @GetMapping("/type")
+    public List<ViolationType> getAllViolationType() {
+        return repViolationType.findAll();
     }
 
     @GetMapping
-    public List<Violation> getAll() {
-        return repository.findAll();
+    public List<Violation> getAllViolation() {
+        return repViolation.findAll();
     }
 }

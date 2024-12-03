@@ -6,9 +6,8 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
-//@Table(name = "type_violation", schema = "traffic_offensive")
-@Table(name = "type_violation")
-public class TypeViolation {
+@Table(name = "violation_type")
+public class ViolationType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,13 +16,13 @@ public class TypeViolation {
     @Column(name="Вид", nullable = false, columnDefinition="VARCHAR(128)", unique=true)
     private String type;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "type")
     private Set<Violation> violations = new LinkedHashSet<>();
 
-    public TypeViolation() {
+    public ViolationType() {
     }
 
-    public TypeViolation(Integer id_type, String type) {
+    public ViolationType(Integer id_type, String type) {
         this.id_type = id_type;
         this.type = type;
     }
@@ -54,6 +53,6 @@ public class TypeViolation {
 
     @Override
     public String toString() {
-        return "TypeViolation [id_type=" + id_type + ", type=" + type + "]";
+        return "ViolationType [id_type=" + id_type + ", type=" + type + ", violations=" + violations + "]";
     }
 }

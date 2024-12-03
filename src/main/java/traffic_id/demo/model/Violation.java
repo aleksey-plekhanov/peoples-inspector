@@ -3,7 +3,6 @@ package traffic_id.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-//@Table(name = "violation", schema = "traffic_offensive")
 @Table(name = "violation")
 public class Violation {
 
@@ -17,14 +16,14 @@ public class Violation {
     @Column(name="Название", nullable = false, columnDefinition="text", unique=true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Вид", nullable = false)
-    private TypeViolation type;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "Вид", nullable = true, unique=false)
+    private ViolationType type;
 
     @Column(name="Наказание", nullable = false, columnDefinition="text")
     private String punishment;
 
-    public Violation(Integer id_violation, String article, String name, TypeViolation type, String punishment) {
+    public Violation(Integer id_violation, String article, String name, ViolationType type, String punishment) {
         this.id_violation = id_violation;
         this.article = article;
         this.name = name;
@@ -59,11 +58,11 @@ public class Violation {
         this.name = name;
     }
 
-    public TypeViolation getType() {
+    public ViolationType getType() {
         return type;
     }
 
-    public void setType(TypeViolation type) {
+    public void setType(ViolationType type) {
         this.type = type;
     }
 
