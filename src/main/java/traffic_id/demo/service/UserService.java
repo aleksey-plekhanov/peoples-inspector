@@ -84,6 +84,14 @@ public class UserService implements IUserService {
         return userFromDb.orElse(new User());
     }
 
+    public User findUserByLogin(String login) {
+        UserData userDataFromDb = userDataRepository.findByLogin(login);
+        if (userDataFromDb == null)
+            return null;
+        
+        return userDataFromDb.getUser();
+    }
+
     public List<User> allUsers() {
         return userRepository.findAll();
     }

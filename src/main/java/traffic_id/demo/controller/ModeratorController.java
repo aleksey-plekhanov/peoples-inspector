@@ -39,7 +39,7 @@ public class ModeratorController {
     }
 
     @GetMapping("/gt/{moderatorId}")
-    public String gtModerator(@PathVariable("moderatorId") Integer moderatorId, Model model) {
+    public String gtModerator(@PathVariable Integer moderatorId, Model model) {
         model.addAttribute("allModerators", userService.moderatorgtList(moderatorId));
         return "moderator";
     }

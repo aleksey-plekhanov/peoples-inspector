@@ -35,7 +35,7 @@ public class Application {
     @JoinColumn(name = "Модератор", nullable = true, unique=false)
     private Moderator moderator;
 
-    @Column(name="Комментарий модератора", nullable = false, columnDefinition="text")
+    @Column(name="Комментарий модератора", nullable = true, columnDefinition="text")
     private String commentary;
 
     @Column(name = "Время проверки", nullable = true, columnDefinition="date")
@@ -52,6 +52,13 @@ public class Application {
         this.moderator = moderator;
         this.commentary = commentary;
         this.date_check = date_check;
+    }
+
+    public Application(User user, ApplicationData application_data, District district, Status status) {
+        this.user = user;
+        this.application_data = application_data;
+        this.district = district;
+        this.status = status;
     }
 
     public Application() {

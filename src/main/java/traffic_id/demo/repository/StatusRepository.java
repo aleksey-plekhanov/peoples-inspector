@@ -6,4 +6,5 @@ import traffic_id.demo.model.Status;
 
 public interface StatusRepository extends JpaRepository<Status, Integer> {
 
+    Status findByStatus(String status);
 }

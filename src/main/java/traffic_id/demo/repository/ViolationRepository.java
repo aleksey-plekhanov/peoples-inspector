@@ -6,4 +6,5 @@ import traffic_id.demo.model.Violation;
 
 public interface ViolationRepository extends JpaRepository<Violation, Integer> {
 
+    
 }

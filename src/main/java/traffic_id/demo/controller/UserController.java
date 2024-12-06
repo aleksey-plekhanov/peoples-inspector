@@ -1,6 +1,5 @@
 package traffic_id.demo.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +16,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping()
+    @GetMapping("/all")
     public String userList(Model model) {
         model.addAttribute("allUsers", userService.allUsers());
         return "user";
     }
 
-    @GetMapping("/gt/{userId}")
-    public String gtUser(@PathVariable("userId") Integer userId, Model model) {
-        model.addAttribute("allModerators", userService.usergtList(userId));
+    @GetMapping("/get/{userId}")
+    public String getUser(@PathVariable Integer userId, Model model) {
+        model.addAttribute("allUsers", userService.usergtList(userId));
         return "user";
     }
 }

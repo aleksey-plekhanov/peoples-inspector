@@ -16,7 +16,7 @@ public class DemoApplication implements CommandLineRunner {
     private ViolationTypeRepository repositoryType;
 
     // Менять вручную
-    private static final boolean isDebug = false;
+    private static final boolean isDebug = true;
     // для создания билда: 
     // gradlew build && docker-compose build && docker-compose up -d
 
