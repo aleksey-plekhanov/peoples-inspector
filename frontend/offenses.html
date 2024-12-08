@@ -136,34 +136,52 @@
         </div>
       </div>
       <div class="col-md-8" style="padding: 2%;">
-        <h1>Личный кабинет</h1>
+        <h1>Создание заявления</h1>
         <form>
           <div class="form-group" style="margin: 0 auto;">
-            <label for="lastName">Фамилия</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Введите фамилию" required>
+            <label for="lastName">Название</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Введите название заявления" required>
           </div>
           <div class="form-group" style="margin: 0 auto;">
-            <label for="firstName">Имя</label>
-            <input type="text" class="form-control" id="firstName" placeholder="Введите имя" required>
+            <label for="firstName">Дата и время происшествия</label>
+            <input type="datetime-local" class="form-control" id="dateOfApplication" placeholder="Выберите дату и время" required>
           </div>
           <div class="form-group" style="margin: 0 auto;">
-            <label for="patronymic">Отчество (при наличии)</label>
-            <input type="text" class="form-control" id="patronymic" placeholder="Введите отчество">
+            <label for="patronymic">Район</label>
+            <select name="pets" id="pet-select" class="form-control" required>
+              <option value="-1">Выберите район</option>
+              <option value="0">Кировский район</option>
+              <option value="1">Трусовский район</option>
+              <option value="2">Ленинский район</option>
+            </select>
           </div>
           <div class="form-group" style="margin: 0 auto;">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Введите email" required>
+            <label for="patronymic">Приблизительный адрес</label>
+            <input type="text" class="form-control" id="address" placeholder="Введите адрес">
           </div>
           <div class="form-group" style="margin: 0 auto;">
-            <label for="username">Логин</label>
-            <input type="text" class="form-control" id="username" placeholder="Введите логин" required>
+            <label for="username">Вид правонарушения</label>
+            <select name="pets" id="pet-select" class="form-control">
+              <option value="-1">Выберите район</option>
+              <option value="0">Кировский район</option>
+              <option value="1">Трусовский район</option>
+              <option value="2">Ленинский район</option>
+            </select>
           </div>
           <div class="form-group" style="margin: 0 auto;">
-            <label for="username">Пароль</label>
-            <input type="text" class="form-control" id="pass" placeholder="Введите новый пароль" required>
+            <label for="email">Описание ситуации</label>
+            <textarea class="form-control" style="height: 113px !important;" rows="2" cols="20" wrap="hard" placeholder="Опишите ситуацию"></textarea>
+          </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="username">Прикрепленные файлы</label>
+            <label class="upload-button" for="file-upload">
+              <i class="bi bi-plus-lg"></i>
+              Добавить файл</label>
+            <input type="file" id="file-upload" class="file-upload" />
+            <ul id="file-list" class="list-group"></ul>
           </div>
         </form>
-        <button type="submit" class="btn-lk" style="min-width: 70%; max-width: 40%;" onclick="authUser()">Сохранить изменения</button>
+        <button type="submit" class="btn-lk" style="min-width: 70%; max-width: 40%;" onclick="authUser()">Отправить</button>
       </div>
     </div>
   </div>
@@ -231,6 +249,42 @@
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
 
   <!-- Main JS File -->
+
+  <script>
+    window.addEventListener('load', () => {
+      const datetime = new Date().toISOString().slice(0, -8);
+      document.getElementById('dateOfApplication').value = datetime;
+      document.getElementById('dateOfApplication').setAttribute('max', datetime);
+
+      const currentDate = new Date();
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      const lastMonthDate = currentDate.toISOString().slice(0, -8);
+
+      document.getElementById('dateOfApplication').setAttribute('min', lastMonthDate);
+    });
+
+    document.getElementById('file-upload').addEventListener('change', function(event) {
+            const fileList = event.target.files;
+            const fileListElement = document.getElementById('file-list');
+            //fileListElement.innerHTML = ''; // Очищаем предыдущий список
+
+            // Добавляем каждый файл в список
+            for (let i = 0; i < fileList.length; i++) {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex align-items-center';
+                
+                // Создаем элемент иконки
+                const icon = document.createElement('i');
+                icon.className = 'bi bi-file-earmark'; // Иконка файла
+                icon.style.marginRight = '10px'; // Отступ справа от иконки
+
+                // Добавляем иконку и имя файла в элемент списка
+                listItem.appendChild(icon);
+                listItem.appendChild(document.createTextNode(fileList[i].name));
+                fileListElement.appendChild(listItem);
+            }
+    });
+  </script>
   <script src="assets/js/main.js"></script>
 
 </body>
