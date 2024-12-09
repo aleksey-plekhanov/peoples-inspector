@@ -222,7 +222,7 @@ h6 {
 
 .violation-list {
   scrollbar-width: thin;
-  max-height: 900px;
+  max-height: 1000px;
   overflow-y: auto;
   outline-width: 80%;
   margin-top: -10px;
