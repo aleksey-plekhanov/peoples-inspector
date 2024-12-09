@@ -136,7 +136,7 @@
         </div>
       </div>
       <div class="col-md-8" style="padding: 2%;">
-        <h1>Создание заявления</h1>
+        <h1 style="font-size: 36px;">Создание заявления</h1>
         <form>
           <div class="form-group" style="margin: 0 auto;">
             <label for="lastName">Название</label>
@@ -177,7 +177,7 @@
             <label class="upload-button" for="file-upload">
               <i class="bi bi-plus-lg"></i>
               Добавить файл</label>
-            <input type="file" id="file-upload" class="file-upload" />
+            <input type="file" id="file-upload" class="file-upload" accept="image/*,video/*,audio/*" multiple/>
             <ul id="file-list" class="list-group"></ul>
           </div>
         </form>
@@ -263,27 +263,59 @@
       document.getElementById('dateOfApplication').setAttribute('min', lastMonthDate);
     });
 
+    const fileListArray = []; // Массив для хранения загруженных файлов
+
     document.getElementById('file-upload').addEventListener('change', function(event) {
-            const fileList = event.target.files;
-            const fileListElement = document.getElementById('file-list');
-            //fileListElement.innerHTML = ''; // Очищаем предыдущий список
+    const fileList = event.target.files;
+    const fileListElement = document.getElementById('file-list');
 
-            // Добавляем каждый файл в список
-            for (let i = 0; i < fileList.length; i++) {
-                const listItem = document.createElement('li');
-                listItem.className = 'list-group-item d-flex align-items-center';
-                
-                // Создаем элемент иконки
-                const icon = document.createElement('i');
-                icon.className = 'bi bi-file-earmark'; // Иконка файла
-                icon.style.marginRight = '10px'; // Отступ справа от иконки
+    for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        fileListArray.push(file); // Добавляем файл в массив
 
-                // Добавляем иконку и имя файла в элемент списка
-                listItem.appendChild(icon);
-                listItem.appendChild(document.createTextNode(fileList[i].name));
-                fileListElement.appendChild(listItem);
-            }
-    });
+        const listItem = document.createElement('button');
+        listItem.className = 'list-group-item d-flex align-items-center';
+        listItem.type = 'button'
+
+        // Создаем элемент иконки
+        const icon = document.createElement('i');
+        icon.className = 'bi bi-file-earmark'; // Иконка файла
+        icon.style.marginRight = '10px'; // Отступ справа от иконки
+
+        // Создаем кнопку "Удалить"
+        const deleteButton = document.createElement('button');
+        Object.assign(deleteButton.style, {
+            marginRight: '10px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer'
+        });
+
+        deleteButton.type = 'button';
+        deleteButton.className = 'bi bi-trash';
+
+        deleteButton.onclick = (function(index) {
+            return function(event) {
+                event.stopPropagation(); // Останавливаем всплытие события
+                const fileIndex = fileListArray.indexOf(fileList[index]);
+                if (fileIndex > -1) {
+                    fileListArray.splice(fileIndex, 1); // Удаляем файл из массива
+                    fileListElement.removeChild(listItem); // Удаляем элемент списка
+                }
+            };
+        })(i);
+
+        listItem.onclick = function() {
+            console.log(file);
+        };
+
+        // Добавляем иконку и имя файла в элемент списка
+        listItem.appendChild(deleteButton);
+        listItem.appendChild(icon);
+        listItem.appendChild(document.createTextNode(file.name));
+        fileListElement.appendChild(listItem);
+    }
+});
   </script>
   <script src="assets/js/main.js"></script>
 

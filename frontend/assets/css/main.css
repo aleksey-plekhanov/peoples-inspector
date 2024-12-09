@@ -316,6 +316,7 @@ h6 {
   border-radius: 1rem;
   cursor: pointer;
   margin-bottom: 1.8rem;
+  margin-top: 15px;
   font-size: 18px;
 }
 .btn-lk:hover {
