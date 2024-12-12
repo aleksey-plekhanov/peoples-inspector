@@ -335,7 +335,7 @@ h6 {
   background-color: #3494fc;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1199px) {
   .header .btn-getstarted,
   .header .btn-getstarted:focus {
     color: var(--contrast-color);
@@ -349,7 +349,7 @@ h6 {
   }
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
   .header .btn-getstarted,
   .header .btn-getstarted:focus {
     color: var(--contrast-color);
@@ -369,7 +369,7 @@ h6 {
   background: color-mix(in srgb, var(--accent-color), transparent 15%);
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1200px) {
   .header {
     padding-top: 10px;
   }
@@ -399,7 +399,7 @@ h6 {
 # Navigation Menu
 --------------------------------------------------------------*/
 /* Navmenu - Desktop */
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
   .navmenu {
     padding: 0;
   }
@@ -410,7 +410,6 @@ h6 {
     display: flex;
     list-style: none;
     align-items: center;
-    margin-left: 25%;
   }
 
   .navmenu li {
