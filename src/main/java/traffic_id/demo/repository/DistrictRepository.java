@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import traffic_id.demo.model.District;
 
-public interface DistrictRepository extends JpaRepository<District, Integer> {
+public interface DistrictRepository extends JpaRepository<District, String> {
     
-    District findByDistrict(String district);
+    District findByDistrictName(String districtName);
 }

@@ -12,7 +12,7 @@ import traffic_id.demo.repository.StatusRepository;
 
 
 @RestController
-@RequestMapping("application/status")
+@RequestMapping("status")
 public class StatusController {
     
     @Autowired

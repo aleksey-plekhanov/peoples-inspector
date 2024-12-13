@@ -1,30 +1,32 @@
 package traffic_id.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "violation")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "article")
 public class Violation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_violation;
-
     @Column(name="Статья", nullable = false, columnDefinition="varchar(20)", unique=true)
     private String article;
 
     @Column(name="Название", nullable = false, columnDefinition="text", unique=true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JsonIdentityReference(alwaysAsId = true)
+    @ManyToOne(cascade=CascadeType.ALL, optional = false)
     @JoinColumn(name = "Вид", nullable = true, unique=false)
     private ViolationType type;
 
     @Column(name="Наказание", nullable = false, columnDefinition="text")
     private String punishment;
 
-    public Violation(Integer id_violation, String article, String name, ViolationType type, String punishment) {
-        this.id_violation = id_violation;
+    public Violation(String article, String name, ViolationType type, String punishment) {
         this.article = article;
         this.name = name;
         this.type = type;
@@ -32,14 +34,6 @@ public class Violation {
     }
 
     public Violation() {
-    }
-
-    public Integer getId() {
-        return id_violation;
-    }
-
-    public void setId(Integer id_violation) {
-        this.id_violation = id_violation;
     }
 
     public String getArticle() {
@@ -76,7 +70,6 @@ public class Violation {
 
     @Override
     public String toString() {
-        return "Violation [id_violation=" + id_violation + ", article=" + article + ", name=" + name + ", type=" + type
-                + ", punishment=" + punishment + "]";
+        return "Violation [article=" + article + ", name=" + name + ", type=" + type.getTypeName() + ", punishment=" + punishment + "]";
     }
 }

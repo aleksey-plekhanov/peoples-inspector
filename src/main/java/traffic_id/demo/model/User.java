@@ -4,15 +4,20 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_user;
+    private Integer id;
 
     @Column(name="Фамилия", nullable = false, columnDefinition="VARCHAR(50)")
     private String surname;
@@ -23,21 +28,24 @@ public class User {
     @Column(name="Отчество", columnDefinition="VARCHAR(50)")
     private String patronymic;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIdentityReference(alwaysAsId = true)
+    @OneToOne(cascade=CascadeType.ALL, optional = false)
     @JoinColumn(name = "Данные")
     private UserData data;
 
     @Column(name = "Дата регистрации", nullable = true, columnDefinition="date")
     private Date registration;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "user")
     private Set<Moderator> moderators = new LinkedHashSet<>();
 
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "user")
     private Set<Application> applications = new LinkedHashSet<>();
 
-    public User(Integer id_user, String surname, String name, String patronymic, UserData data, Date registration) {
-        this.id_user = id_user;
+    public User(Integer userId, String surname, String name, String patronymic, UserData data, Date registration) {
+        this.id = userId;
         this.surname = surname;
         this.name = name;
         this.patronymic = patronymic;
@@ -49,11 +57,11 @@ public class User {
     }
 
     public Integer getId() {
-        return id_user;
+        return id;
     }
 
-    public void setId(Integer id_user) {
-        this.id_user = id_user;
+    public void setId(Integer userId) {
+        this.id = userId;
     }
 
     public String getSurname() {
@@ -106,8 +114,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id_user=" + id_user + ", surname=" + surname + ", name=" + name + ", patronymic=" + patronymic
-                + ", data=" + data + ", registration=" + registration + ", moderators=" + moderators + ", applications="
-                + applications + "]";
+        return "User [userId=" + id + ", surname=" + surname + ", name=" + name + ", patronymic=" + patronymic
+                + ", data=" + data.getId() + ", registration=" + registration + "]";
     }
 }

@@ -3,48 +3,50 @@ package traffic_id.demo.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "application_data")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class ApplicationData {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_application_data;
+    private Integer applicationDataId;
      
     @Column(name="Информация", nullable = false, columnDefinition="text")
     private String information;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "applicationData")
-    private Set<ApplicationDataAudio> audios = new LinkedHashSet<>();
+    private Set<File> files = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "applicationData")
-    private Set<ApplicationDataPhoto> photoes = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "applicationData")
-    private Set<ApplicationDataVideo> videos = new LinkedHashSet<>();
-
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "applicationData")
     private Set<ApplicationDataViolation> violations = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "application_data")
+    @JsonIdentityReference(alwaysAsId = true)
+    @OneToMany(mappedBy = "applicationData")
     private Set<Application> applications = new LinkedHashSet<>();
 
     public ApplicationData(Integer id_application_data, String information) {
-        this.id_application_data = id_application_data;
+        this.applicationDataId = id_application_data;
         this.information = information;
     }
 
     public ApplicationData() {
     }
 
-    public Integer getId_application_data() {
-        return id_application_data;
+    public Integer getId() {
+        return applicationDataId;
     }
 
-    public void setId_application_data(Integer id_application_data) {
-        this.id_application_data = id_application_data;
+    public void setId(Integer id_application_data) {
+        this.applicationDataId = id_application_data;
     }
 
     public String getInformation() {
@@ -55,28 +57,12 @@ public class ApplicationData {
         this.information = information;
     }
 
-    public Set<ApplicationDataAudio> getAudios() {
-        return audios;
+    public Set<File> getFiles() {
+        return files;
     }
 
-    public void setAudios(Set<ApplicationDataAudio> audios) {
-        this.audios = audios;
-    }
-
-    public Set<ApplicationDataPhoto> getPhotoes() {
-        return photoes;
-    }
-
-    public void setPhotoes(Set<ApplicationDataPhoto> photoes) {
-        this.photoes = photoes;
-    }
-
-    public Set<ApplicationDataVideo> getVideos() {
-        return videos;
-    }
-
-    public void setVideos(Set<ApplicationDataVideo> videos) {
-        this.videos = videos;
+    public void setFiles(Set<File> photoes) {
+        this.files = photoes;
     }
 
     public Set<ApplicationDataViolation> getViolations() {
@@ -97,8 +83,7 @@ public class ApplicationData {
 
     @Override
     public String toString() {
-        return "ApplicationData [id_application_data=" + id_application_data + ", information=" + information
-                + ", audios=" + audios + ", photoes=" + photoes + ", videos=" + videos + ", violations=" + violations
-                + ", applications=" + applications + "]";
+        return "ApplicationData [id_application_data=" + applicationDataId + ", information=" + information
+                + "photoes=" + files + "]";
     }
 }

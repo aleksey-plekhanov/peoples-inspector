@@ -10,43 +10,43 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "violation_type")
+@Table(name = "file_type")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "typeName")
-public class ViolationType {
-
+public class FileType {
+    
     @Id
-    @Column(name="Вид", nullable = false, columnDefinition="VARCHAR(128)", unique=true)
+    @Column(name="Тип файла", nullable = false, columnDefinition="varchar(2083)", unique=true)
     private String typeName;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "type")
-    private Set<Violation> violations = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "type")
+    private Set<File> files = new LinkedHashSet<>();
 
-    public ViolationType() {
+    public FileType(String typeName) {
+        this.typeName = typeName;
     }
 
-    public ViolationType(String typeName) {
-        this.typeName = typeName;
+    public FileType() {
     }
 
     public String getTypeName() {
         return typeName;
     }
-    
+
     public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-    
-    public Set<Violation> getViolations() {
-        return violations;
+
+    public Set<File> getFiles() {
+        return files;
     }
-    
-    public void setViolations(Set<Violation> violations) {
-        this.violations = violations;
+
+    public void setFiles(Set<File> files) {
+        this.files = files;
     }
 
     @Override
     public String toString() {
-        return "ViolationType [typeName=" + typeName + "]";
+        return "FileType [typeName=" + typeName + "]";
     }
 }

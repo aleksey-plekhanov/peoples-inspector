@@ -14,10 +14,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     
     Optional<User> findByData(UserData data);
 
-    @Override
-    @NonNull
-    @Query("select u.id_user, u.surname, u.name, u.patronymic, d.email, u.registration " +
-            "from User u inner join u.data d " +
-            "where d.id_user_data = :id_user_data")
-    List<User> findAll();
+    // @Override
+    // @NonNull
+    // @Query("select u.userId, u.surname, u.name, u.patronymic, u.data.email, u.registration " +
+    //         "from User u "//inner join u.data d " +
+    //         //"where d.userDataId = u.data.userDataId"
+    //         )
+    // List<Object[]> findAll();
 }

@@ -4,16 +4,22 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "moderator")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Moderator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_moderator;
+    private Integer moderatorId;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Пользователь", nullable = false, unique=false)
     private User user;
@@ -24,11 +30,12 @@ public class Moderator {
     @Column(name = "Дата окончания должности", nullable = false, columnDefinition="date")
     private Date end_post;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "moderator")
     private Set<Application> applications = new LinkedHashSet<>();
 
     public Moderator(Integer id_moderator, User user, Date begin_post, Date end_post) {
-        this.id_moderator = id_moderator;
+        this.moderatorId = moderatorId;
         this.user = user;
         this.begin_post = begin_post;
         this.end_post = end_post;
@@ -38,11 +45,11 @@ public class Moderator {
     }
 
     public Integer getId() {
-        return id_moderator;
+        return moderatorId;
     }
 
-    public void setId(Integer id_moderator) {
-        this.id_moderator = id_moderator;
+    public void setId(Integer moderatorId) {
+        this.moderatorId = moderatorId;
     }
 
     public User getUser() {
@@ -69,14 +76,6 @@ public class Moderator {
         this.end_post = end_post;
     }
 
-    public Integer getId_moderator() {
-        return id_moderator;
-    }
-
-    public void setId_moderator(Integer id_moderator) {
-        this.id_moderator = id_moderator;
-    }
-
     public Set<Application> getApplications() {
         return applications;
     }
@@ -87,8 +86,8 @@ public class Moderator {
 
     @Override
     public String toString() {
-        return "Moderator [id_moderator=" + id_moderator + ", user=" + user + ", begin_post=" + begin_post
-                + ", end_post=" + end_post + ", applications=" + applications + "]";
+        return "Moderator [moderatorId=" + moderatorId + ", user=" + user + ", begin_post=" + begin_post
+                + ", end_post=" + end_post + "]";
     }
     
 }

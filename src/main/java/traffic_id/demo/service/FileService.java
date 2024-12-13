@@ -9,16 +9,22 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import traffic_id.demo.repository.FileRepository;
+
 @Service
 public class FileService {
 
     private final Path fileStorageLocation;
+
+    @Autowired
+    private FileRepository fileRepository;
 
     public FileService() {
         this.fileStorageLocation = Paths.get("Applications").toAbsolutePath().normalize();
@@ -40,6 +46,19 @@ public class FileService {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             throw new RuntimeException("Не удалось сохранить файл " + fileName + ". Пожалуйста, попробуйте снова!", ex);
+        }
+    }
+
+    /**
+     * Добавляет файлы в БД.
+     * @param file Многостраничный файл, который нужно сохранить
+     */
+    public void saveFilesIntoDB(List<String> files, Integer idData, String type) {
+        for (String file : files)
+        {
+            Path path = this.fileStorageLocation.resolve(idData.toString()).resolve(file);
+            path.toString();
+            fileRepository.addFile(idData, path.toString(), type);
         }
     }
 

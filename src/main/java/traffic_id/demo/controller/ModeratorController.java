@@ -1,5 +1,7 @@
 package traffic_id.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import traffic_id.demo.model.Moderator;
 import traffic_id.demo.service.UserService;
 
 @RestController
@@ -38,9 +41,9 @@ public class ModeratorController {
         return "redirect:/moderator";
     }
 
-    @GetMapping("/gt/{moderatorId}")
-    public String gtModerator(@PathVariable Integer moderatorId, Model model) {
-        model.addAttribute("allModerators", userService.moderatorgtList(moderatorId));
+    @GetMapping("/{moderatorId}")
+    public String getModerator(@PathVariable Integer moderatorId, Model model) {
+        model.addAttribute("allModerators", userService.findModeratorById(moderatorId));
         return "moderator";
     }
 }

@@ -3,44 +3,38 @@ package traffic_id.demo.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "district")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class District {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_district;
+    @Column(name="Район", nullable = false, columnDefinition="VARCHAR(30)", unique=true)
+    private String districtName;
 
-    @Column(name="Район", nullable = false, columnDefinition="VARCHAR(50)", unique=true)
-    private String district;
-
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "district")
     private Set<Application> applications = new LinkedHashSet<>();
 
-    public District(Integer id_district, String district) {
-        this.id_district = id_district;
-        this.district = district;
+    public District(String districtName) {
+        this.districtName = districtName;
     }
 
     public District() {
     }
 
-    public Integer getId_district() {
-        return id_district;
+    public String getDistrictName() {
+        return districtName;
     }
 
-    public void setId_district(Integer id_district) {
-        this.id_district = id_district;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
     }
 
     public Set<Application> getApplications() {
@@ -53,7 +47,6 @@ public class District {
 
     @Override
     public String toString() {
-        return "District [id_district=" + id_district + ", district=" + district + ", applications=" + applications
-                + "]";
+        return "District [districtName=" + districtName + "]";
     }
 }

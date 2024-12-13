@@ -3,52 +3,38 @@ package traffic_id.demo.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "status")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "statusName")
 public class Status {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_status;
+    @Column(name="Статус", nullable = false, columnDefinition="VARCHAR(25)", unique=true)
+    private String statusName;
 
-    @Column(name="Статус", nullable = false, columnDefinition="VARCHAR(50)", unique=true)
-    private String status;
-
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "status")
     private Set<Application> applications = new LinkedHashSet<>();
 
-    public Status(Integer id_status, String status) {
-        this.id_status = id_status;
-        this.status = status;
+    public Status(String statusName) {
+        this.statusName = statusName;
     }
 
     public Status() {
     }
 
-    public Integer getId() {
-        return id_status;
+    public String getStatusName() {
+        return statusName;
     }
 
-    public void setId(Integer id_status) {
-        this.id_status = id_status;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Integer getId_status() {
-        return id_status;
-    }
-
-    public void setId_status(Integer id_status) {
-        this.id_status = id_status;
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     public Set<Application> getApplications() {
@@ -61,7 +47,7 @@ public class Status {
 
     @Override
     public String toString() {
-        return "Status [id_status=" + id_status + ", status=" + status + ", applications=" + applications + "]";
+        return "Status [statusName=" + statusName + "]";
     }
 
 }

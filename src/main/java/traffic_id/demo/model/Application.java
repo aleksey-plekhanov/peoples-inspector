@@ -2,35 +2,51 @@ package traffic_id.demo.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "application")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Application {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_application;
+    private Integer applicationId;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Заявитель", nullable = false, unique=false)
     private User user;
 
+    @Column(name = "Название", nullable = false, columnDefinition="varchar(50)")
+    private String title;
+
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Данные", nullable = false, unique=true)
-    private ApplicationData application_data;
+    private ApplicationData applicationData;
 
     @Column(name = "Время поступления", nullable = true, columnDefinition="date")
-    private Date date_arrive;
+    private Date dateArrive;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Район", nullable = false, unique=false)
     private District district;
 
+    @Column(name = "Адрес", nullable = false, columnDefinition="varchar(100)")
+    private String address;
+
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Статус", nullable = false, unique=false)
     private Status status;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Модератор", nullable = true, unique=false)
     private Moderator moderator;
@@ -39,37 +55,41 @@ public class Application {
     private String commentary;
 
     @Column(name = "Время проверки", nullable = true, columnDefinition="date")
-    private Date date_check;
+    private Date dateCheck;
 
-    public Application(Integer id_application, User user, ApplicationData application_data, Date date_arrive,
-            District district, Status status, Moderator moderator, String commentary, Date date_check) {
-        this.id_application = id_application;
+    public Application(Integer applicationId, User user, String title, ApplicationData applicationData, Date dateArrive,
+            District district, String address, Status status, Moderator moderator, String commentary, Date dateCheck) {
+        this.applicationId = applicationId;
         this.user = user;
-        this.application_data = application_data;
-        this.date_arrive = date_arrive;
+        this.title = title;
+        this.applicationData = applicationData;
+        this.dateArrive = dateArrive;
         this.district = district;
+        this.address = address;
         this.status = status;
         this.moderator = moderator;
         this.commentary = commentary;
-        this.date_check = date_check;
+        this.dateCheck = dateCheck;
     }
 
-    public Application(User user, ApplicationData application_data, District district, Status status) {
+    public Application(User user, String title, ApplicationData applicationData, District district, String address, Status status) {
         this.user = user;
-        this.application_data = application_data;
+        this.title = title;
+        this.applicationData = applicationData;
         this.district = district;
+        this.address = address;
         this.status = status;
     }
 
     public Application() {
     }
 
-    public Integer getId_application() {
-        return id_application;
+    public Integer getIdapplication() {
+        return applicationId;
     }
 
-    public void setId_application(Integer id_application) {
-        this.id_application = id_application;
+    public void setId(Integer applicationId) {
+        this.applicationId = applicationId;
     }
 
     public User getUser() {
@@ -80,20 +100,28 @@ public class Application {
         this.user = user;
     }
 
-    public ApplicationData getApplication_data() {
-        return application_data;
+    public String getTitle() {
+        return title;
     }
 
-    public void setApplication_data(ApplicationData application_data) {
-        this.application_data = application_data;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Date getDate_arrive() {
-        return date_arrive;
+    public ApplicationData getData() {
+        return applicationData;
     }
 
-    public void setDate_arrive(Date date_arrive) {
-        this.date_arrive = date_arrive;
+    public void setData(ApplicationData applicationData) {
+        this.applicationData = applicationData;
+    }
+
+    public Date getDateArrive() {
+        return dateArrive;
+    }
+
+    public void setDateArrive(Date dateArrive) {
+        this.dateArrive = dateArrive;
     }
 
     public District getDistrict() {
@@ -102,6 +130,14 @@ public class Application {
 
     public void setDistrict(District district) {
         this.district = district;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Status getStatus() {
@@ -128,18 +164,18 @@ public class Application {
         this.commentary = commentary;
     }
 
-    public Date getDate_check() {
-        return date_check;
+    public Date getDateCheck() {
+        return dateCheck;
     }
 
-    public void setDate_check(Date date_check) {
-        this.date_check = date_check;
+    public void setDateCheck(Date dateCheck) {
+        this.dateCheck = dateCheck;
     }
 
     @Override
     public String toString() {
-        return "Application [id_application=" + id_application + ", user=" + user + ", application_data="
-                + application_data + ", date_arrive=" + date_arrive + ", district=" + district + ", status=" + status
-                + ", moderator=" + moderator + ", commentary=" + commentary + ", date_check=" + date_check + "]";
+        return "Application [applicationId=" + applicationId + ", user=" + user + ", title=" + title + ", applicationData="
+                + applicationData + ", dateArrive=" + dateArrive + ", district=" + district + ", address=" + address 
+                + ", status=" + status + ", moderator=" + moderator + ", commentary=" + commentary + ", dateCheck=" + dateCheck + "]";
     }
 }

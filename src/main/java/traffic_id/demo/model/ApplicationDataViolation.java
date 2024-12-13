@@ -1,25 +1,32 @@
 package traffic_id.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "application_data_violation")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class ApplicationDataViolation {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_application_data_violation;
+    private Integer ApplicationDataViolationId;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_application_data", nullable = false, unique=false)
     private ApplicationData applicationData;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_violation", nullable = false, unique=false)
     private Violation violation;
 
-    public ApplicationDataViolation(Integer id_application_data_violation, ApplicationData applicationData, Violation violation) {
-        this.id_application_data_violation = id_application_data_violation;
+    public ApplicationDataViolation(Integer ApplicationDataViolationId, ApplicationData applicationData, Violation violation) {
+        this.ApplicationDataViolationId = ApplicationDataViolationId;
         this.applicationData = applicationData;
         this.violation = violation;
     }
@@ -43,17 +50,17 @@ public class ApplicationDataViolation {
         this.violation = violation;
     }
 
-    public Integer getId_application_data_violation() {
-        return id_application_data_violation;
+    public Integer getId() {
+        return ApplicationDataViolationId;
     }
 
-    public void setId_application_data_violation(Integer id_application_data_violation) {
-        this.id_application_data_violation = id_application_data_violation;
+    public void setId(Integer ApplicationDataViolationId) {
+        this.ApplicationDataViolationId = ApplicationDataViolationId;
     }
     
     @Override
     public String toString() {
-        return "ApplicationDataViolation [id_application_data_violation="+ id_application_data_violation + "applicationData=" 
+        return "ApplicationDataViolation [ApplicationDataViolationId="+ ApplicationDataViolationId + "applicationData=" 
         + applicationData + ", violation=" + violation + "]";
     }
 }

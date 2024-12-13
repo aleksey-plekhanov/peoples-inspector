@@ -81,7 +81,7 @@ public class UserService implements IUserService {
 
     public User findUserById(Integer userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
+        return userFromDb.orElse(null);
     }
 
     public User findUserByLogin(String login) {
@@ -93,6 +93,7 @@ public class UserService implements IUserService {
     }
 
     public List<User> allUsers() {
+        List<User> us = userRepository.findAll();
         return userRepository.findAll();
     }
     
@@ -103,7 +104,12 @@ public class UserService implements IUserService {
 
     public Moderator findModeratorById(Integer moderatorId) {
         Optional<Moderator> moderatorFromDb = moderatorRepository.findById(moderatorId);
-        return moderatorFromDb.orElse(new Moderator());
+        return moderatorFromDb.orElse(null);
+    }
+
+    public Moderator findModeratorByUser(User user) {
+        Optional<Moderator> moderatorFromDb = moderatorRepository.findLastActive(user);
+        return moderatorFromDb.orElse(null);
     }
 
     public List<Moderator> allModerators() {
@@ -132,10 +138,5 @@ public class UserService implements IUserService {
         moderator.get().getUser().getData().setRoles("ROLE_USER");
         
         return true;
-    }
-
-    public List<Moderator> moderatorgtList(Integer idMin) {
-        return em.createQuery("SELECT m FROM Moderator m WHERE m.id > :paramId", Moderator.class)
-                .setParameter("paramId", idMin).getResultList();
     }
 }
