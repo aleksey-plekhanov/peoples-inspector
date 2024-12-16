@@ -185,9 +185,10 @@ h6 {
   margin-right: 150px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.6rem;
+  margin-bottom: 0.8rem;
   padding: 1%;
 }
+
 .form-group label {
   display: block;
   font-weight: bold;
@@ -308,6 +309,20 @@ h6 {
   object-fit: cover;
 }
 
+.btn-moderator {
+  background-color: red;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  margin-bottom: 0.1rem;
+  margin-top: 15px;
+  font-size: 18px;
+  min-width: 70%;
+  max-width: 40%;
+}
+
 .btn-lk {
   background-color: #007bff;
   color: #fff;
@@ -315,9 +330,11 @@ h6 {
   padding: 0.6rem 2rem;
   border-radius: 1rem;
   cursor: pointer;
-  margin-bottom: 1.8rem;
+  margin-bottom: 0.5rem;
   margin-top: 15px;
   font-size: 18px;
+  min-width: 70%;
+  max-width: 40%;
 }
 .btn-lk:hover {
   background-color: #3494fc;
@@ -343,14 +360,12 @@ h6 {
 }
 
 .lineInformation {
-  margin: 1% 0 0 15%;
-  width: 70%;
+  margin: 2% auto;
   display: flex;
-  justify-content: space-between;
+  gap: 20px;
   font-size: 14px;
   max-height: 20px;
 }
-
 
 .lineInformation .number {
   font-weight: bold;
@@ -367,7 +382,7 @@ h6 {
   font-weight: bold;
   border-radius: 10px;
   font-size: 12px;
-  width: 20%;
+  width: 15%;
   background-color: rgb(245, 243, 243);
   color: black;
   font-weight: bold;
@@ -376,7 +391,7 @@ h6 {
 
 .lineInformation .status {
   background-color: #059652;
-  width: 20%;
+  width: 15%;
   
   border-radius: 10px;
   color: white;

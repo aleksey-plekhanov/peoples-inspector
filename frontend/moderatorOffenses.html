@@ -132,19 +132,22 @@
         </div>
       </div>
       <div class="col-md-8" style="padding: 2%;">
-        <h1 style="font-size: 36px;">Создание заявления</h1>
         <form>
           <div class="form-group" style="margin: 0 auto;">
-            <label for="lastName">Название</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Введите название заявления" required>
+            <label>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis non, inventore incidunt repudiandae id vel nisi officiis provident iste necessitatibus. Ex recusandae eveniet</label>
+            <div class="lineInformation">
+              <div class="number">№99999</div>
+              <div class="status">Одобрено</div>
+              <div class="date">12.12.1212</div>
+            </div>
           </div>
           <div class="form-group" style="margin: 0 auto;">
             <label for="firstName">Дата и время происшествия</label>
-            <input type="datetime-local" class="form-control" id="dateOfApplication" placeholder="Выберите дату и время" required>
+            <input type="datetime-local" class="form-control" id="dateOfApplication" placeholder="Выберите дату и время" readonly>
           </div>
           <div class="form-group" style="margin: 0 auto;">
             <label for="patronymic">Район</label>
-            <select name="pets" id="pet-select" class="form-control" required>
+            <select name="pets" id="pet-select" class="form-control" readonly>
               <option value="-1">Выберите район</option>
               <option value="0">Кировский район</option>
               <option value="1">Трусовский район</option>
@@ -153,7 +156,7 @@
           </div>
           <div class="form-group" style="margin: 0 auto;">
             <label for="patronymic">Приблизительный адрес</label>
-            <input type="text" class="form-control" id="address" placeholder="Введите адрес">
+            <input type="text" class="form-control" id="address" placeholder="Введите адрес" readonly>
           </div>
           <div class="form-group" style="margin: 0 auto;">
             <label for="username">Правонарушение</label>
@@ -166,18 +169,21 @@
           </div>
           <div class="form-group" style="margin: 0 auto;">
             <label for="email">Описание</label>
-            <textarea class="form-control" style="height: 113px !important;" rows="2" cols="20" wrap="hard" placeholder="Опишите ситуацию"></textarea>
+            <textarea class="form-control" style="height: 113px !important;" rows="2" cols="20" wrap="hard" placeholder="Опишите ситуацию" readonly></textarea>
           </div>
           <div class="form-group" style="margin: 0 auto;">
             <label for="username">Прикрепленные файлы</label>
-            <label class="upload-button" for="file-upload">
-              <i class="bi bi-plus-lg"></i>
-              Добавить файл</label>
+
             <input type="file" id="file-upload" class="file-upload" accept="image/*,video/*,audio/*" multiple/>
             <ul id="file-list" class="list-group"></ul>
           </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="email">Комментарий модератора</label>
+            <textarea class="form-control" style="height: 113px !important;" rows="2" cols="20" wrap="hard" placeholder="Модератор оставляет здесь комментарий" readonly></textarea>
+          </div>
+          <button type="submit" class="btn-moderator" onclick="authUser()">Отклонить</button>
+          <button type="submit" class="btn-moderator" style="background-color: green;" onclick="authUser()">Одобрить</button>
         </form>
-        <button type="submit" class="btn-lk" onclick="authUser()">Отправить</button>
       </div>
     </div>
   </div>
