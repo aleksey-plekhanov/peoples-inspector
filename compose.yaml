@@ -27,6 +27,9 @@ services:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://traffic_db:5432/${POSTGRES_DB}'
       #SPRING_FLYWAY_URL: 'jdbc:postgresql://traffic_db:5432/${POSTGRES_DB}'
       JAVA_OPTS: '-Xmx512m'
+    volumes:
+      - inspector-data:/var/lib/private/applications
+
 
   # pgadmin4:
   #   container_name: pgAdmin4
@@ -54,5 +57,6 @@ services:
 
 volumes:
   pg_traffic:
+  inspector-data:
   # pgadmin-data:
   # apache-data:

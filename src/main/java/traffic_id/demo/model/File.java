@@ -13,11 +13,12 @@ public class File {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_file")
     private Integer fileId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_application_data", nullable = false, unique=false)
-    private ApplicationData applicationData;
+    @JoinColumn(name = "id_application", nullable = false, unique=false)
+    private Application application;
 
     @Column(name="Путь", nullable = false, columnDefinition="varchar")
     private String path;
@@ -27,9 +28,9 @@ public class File {
     @JoinColumn(name = "Тип файла", nullable = false, unique=false)
     private FileType type;
 
-    public File(Integer fileId, ApplicationData applicationData, String photo, String path, FileType type) {
+    public File(Integer fileId, Application applicationData, String photo, String path, FileType type) {
         this.fileId = fileId;
-        this.applicationData = applicationData;
+        this.application = applicationData;
         this.path = path;
         this.type = type;
     }
@@ -45,12 +46,12 @@ public class File {
         this.fileId = fileId;
     }
 
-    public ApplicationData getApplicationData() {
-        return applicationData;
+    public Application getApplication() {
+        return application;
     }
 
-    public void setApplicationData(ApplicationData applicationData) {
-        this.applicationData = applicationData;
+    public void setApplicationData(Application applicationData) {
+        this.application = applicationData;
     }
 
     public String getPath() {
@@ -72,6 +73,6 @@ public class File {
     @Override
     public String toString() {
         return "ApplicationDataPhoto [fileId=" + fileId 
-        + "applicationData=" + applicationData + ", path=" + path + ", type=" + type + "]";
+        + "application=" + application + ", path=" + path + ", type=" + type + "]";
     }
 }

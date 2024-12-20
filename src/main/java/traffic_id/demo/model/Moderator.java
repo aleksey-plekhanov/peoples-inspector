@@ -17,6 +17,7 @@ public class Moderator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_moderator")
     private Integer moderatorId;
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -29,10 +30,6 @@ public class Moderator {
 
     @Column(name = "Дата окончания должности", nullable = false, columnDefinition="date")
     private Date end_post;
-
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "moderator")
-    private Set<Application> applications = new LinkedHashSet<>();
 
     public Moderator(Integer id_moderator, User user, Date begin_post, Date end_post) {
         this.moderatorId = moderatorId;
@@ -74,14 +71,6 @@ public class Moderator {
 
     public void setEnd_post(Date end_post) {
         this.end_post = end_post;
-    }
-
-    public Set<Application> getApplications() {
-        return applications;
-    }
-
-    public void setApplications(Set<Application> applications) {
-        this.applications = applications;
     }
 
     @Override

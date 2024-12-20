@@ -46,7 +46,7 @@ public class WebSecurityConfig{
     @Bean
     public TokenBasedRememberMeServices rememberMeServices() { 
         TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices("traffic", userDetailsService); 
-        rememberMeServices.setTokenValiditySeconds(604800); // one week 
+        rememberMeServices.setTokenValiditySeconds(604800); // 1 неделя 
         return rememberMeServices; 
     }
 
@@ -57,9 +57,10 @@ public class WebSecurityConfig{
                 .disable())
             .authorizeHttpRequests((authz) -> authz
             .requestMatchers( "/registration/**", "/error", "/css/**", "/images/**", "/scss/**", "/vendor/**", "/js/**", "/img/**").permitAll()
-            .requestMatchers("/", "/hello", "/user").hasAnyRole("USER", "MODERATOR", "ADMIN")
-            .requestMatchers("/user/**", "/application/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
-            .requestMatchers("/moderator/**").hasAnyRole("ADMIN")
+            .requestMatchers("/", "/hello").hasAnyRole("USER", "MODERATOR", "ADMIN")
+            .requestMatchers("/user/**").hasRole("USER")
+            .requestMatchers("/moderator/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
+            .requestMatchers("/admin/**").hasAnyRole("ADMIN")
             .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin

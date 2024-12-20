@@ -5,10 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import traffic_id.demo.model.User;
 import traffic_id.demo.model.UserData;
-import traffic_id.demo.validation.annotation.PasswordMatches;
 import traffic_id.demo.validation.annotation.ValidEmail;
 
-@PasswordMatches()
 public class UserDto {
 
     @NotNull
@@ -29,12 +27,6 @@ public class UserDto {
     @NotEmpty
     @Size(min=2, message = "Не меньше 2 знаков")
     private String login;
-
-    @NotNull
-    @NotEmpty
-    @Size(min=6, message = "Не меньше 6 знаков")
-    private String password;
-    private String matchingPassword;
     
     public UserDto(User user) {
         surname = user.getSurname();
@@ -43,7 +35,6 @@ public class UserDto {
         UserData userData = user.getData();
         email = userData.getEmail();
         login = userData.getLogin();
-        password = userData.getPassword();
     }
 
     public UserDto() {
@@ -87,21 +78,5 @@ public class UserDto {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getMatchingPassword() {
-        return matchingPassword;
-    }
-
-    public void setMatchingPassword(String matchingPassword) {
-        this.matchingPassword = matchingPassword;
     }
 }

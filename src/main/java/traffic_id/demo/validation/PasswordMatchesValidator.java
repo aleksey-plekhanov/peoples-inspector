@@ -2,7 +2,7 @@ package traffic_id.demo.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import traffic_id.demo.service.UserDto;
+import traffic_id.demo.service.PasswordDto;
 import traffic_id.demo.validation.annotation.PasswordMatches;
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
@@ -12,8 +12,8 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     }
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context){
-        UserDto user = (UserDto) obj;
-        boolean isValid = user.getPassword().equals(user.getMatchingPassword());
+        PasswordDto passwordDto = (PasswordDto) obj;
+        boolean isValid = passwordDto.getPassword().equals(passwordDto.getMatchingPassword());
         
         if (!isValid) {
           context.disableDefaultConstraintViolation();

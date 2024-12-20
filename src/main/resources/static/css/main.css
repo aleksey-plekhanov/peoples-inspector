@@ -180,20 +180,126 @@ h6 {
 }
 
 .form-group {
-  margin-bottom: 1.6rem;
+  width: 80%;
+  margin-left: 150px;
+  margin-right: 150px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+  padding: 1%;
 }
+
 .form-group label {
   display: block;
   font-weight: bold;
   margin-bottom: 0.3rem;
   text-align: left;
   font-size: 18px;
+  margin-left: 10px;
 }
 
-.form-group input {
-  font-size: 18px;
+.file-upload {
+  display: none; 
+}
+.upload-button {
+  padding: 10px;
+  color: red;
+  cursor: pointer;
+  position: relative;
+}
+
+.form-group input, select, textarea {
+  font-size: 16px;
   border-radius: 24px;
   height: 55px;
+  margin-top: auto;
+}
+
+.container-input {
+  border-radius: 24px;
+  padding: 1.2rem;
+  border: 1px solid white;
+}
+
+.violation-list {
+  scrollbar-width: thin;
+  max-height: 1000px;
+  overflow-y: auto;
+  outline-width: 80%;
+  margin-top: -10px;
+}
+
+.violation-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 90%;
+  border-radius: 1rem;
+  margin: 15px auto;
+  background-color: white;
+}
+
+::-webkit-scrollbar {
+  width: 8px; /* Ширина вертикальной полосы прокрутки */
+  height: 8px; /* Высота горизонтальной полосы прокрутки */
+}
+
+/* Стиль ползунка */
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey; /* Цвет ползунка */
+  border-radius: 10px; /* Закругление углов */
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Цвет дорожки */
+  border-radius: 10px; /* Закругление углов */
+}
+
+.mainblock {
+  padding: 10px;
+  justify-content: space-between;
+  justify-items: left;
+}
+
+.mainblock .number {
+  font-weight: bold;
+  border-radius: 10px;
+  width: 30%;
+  border: 1px solid black;
+  max-height: 20px;
+  min-width: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 12px;
+  color: black;
+  background-color: white;
+}
+
+.mainblock .name {
+  max-width: 70%;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: left;
+}
+
+.mainblock .date {
+  font-weight: bold;
+  border-radius: 10px;
+  font-size: 12px;
+  width: 50%;
+  max-height: 20px;
+  background-color: rgb(245, 243, 243);
+  color: black;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.mainblock .status {
+  background-color: #059652;
+  width: 40%;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 .profile-image {
@@ -202,6 +308,21 @@ h6 {
   border-radius: 50%;
   object-fit: cover;
 }
+
+.btn-moderator {
+  background-color: red;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  margin-top: 15px;
+  font-size: 18px;
+  min-width: 70%;
+  max-width: 40%;
+}
+
 .btn-lk {
   background-color: #007bff;
   color: #fff;
@@ -210,13 +331,73 @@ h6 {
   border-radius: 1rem;
   cursor: pointer;
   margin-bottom: 1.8rem;
+  margin-top: 15px;
   font-size: 18px;
 }
 .btn-lk:hover {
   background-color: #3494fc;
 }
 
-@media (max-width: 1400px) {
+.btn-search {
+  background-color: #007bff;
+  color: #fff;
+  border: 2px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+.btn-search:hover {
+  background-color: #3494fc;
+}
+
+.editDots:after {
+  content: '\2807';
+  margin-right: '10px';
+  cursor: 'pointer';
+  font-size: 25px;
+}
+
+.lineInformation {
+  margin: 2% auto;
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  max-height: 20px;
+}
+
+.lineInformation .number {
+  font-weight: bold;
+  border-radius: 10px;
+  width: 15%;
+  border: 1px solid black;
+  min-width: 40px;
+  font-size: 12px;
+  color: black;
+  background-color: white;
+}
+
+.lineInformation .date {
+  font-weight: bold;
+  border-radius: 10px;
+  font-size: 12px;
+  width: 15%;
+  background-color: rgb(245, 243, 243);
+  color: black;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.lineInformation .status {
+  background-color: #059652;
+  width: 15%;
+
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+@media (max-width: 1199px) {
   .header .btn-getstarted,
   .header .btn-getstarted:focus {
     color: var(--contrast-color);
@@ -230,7 +411,7 @@ h6 {
   }
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
   .header .btn-getstarted,
   .header .btn-getstarted:focus {
     color: var(--contrast-color);
@@ -250,7 +431,7 @@ h6 {
   background: color-mix(in srgb, var(--accent-color), transparent 15%);
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1200px) {
   .header {
     padding-top: 10px;
   }
@@ -280,7 +461,7 @@ h6 {
 # Navigation Menu
 --------------------------------------------------------------*/
 /* Navmenu - Desktop */
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
   .navmenu {
     padding: 0;
   }
@@ -290,12 +471,11 @@ h6 {
     padding: 0;
     display: flex;
     list-style: none;
-    /* align-items: center; */
+    align-items: center;
   }
 
   .navmenu li {
     position: relative;
-    left: 70%;
   }
 
   .navmenu a,
@@ -389,7 +569,7 @@ h6 {
 }
 
 /* Navmenu - Mobile */
-@media (max-width: 1399px) {
+@media (max-width: 1199px) {
   .mobile-nav-toggle {
     color: var(--nav-color);
     font-size: 24px;

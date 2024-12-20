@@ -13,7 +13,7 @@ import traffic_id.demo.model.User;
 public interface FileRepository extends JpaRepository<File, Integer> {
 
     @Procedure("add_file")
-    void addFile(Integer id_data, String path, String type);
+    void addFile(Integer id_app, String path, String type);
 
     @NonNull
     @Query("select f " +

@@ -5,9 +5,12 @@ import traffic_id.demo.exceptions.LoginAlreadyExistException;
 import traffic_id.demo.exceptions.PasswordIncorrectException;
 import traffic_id.demo.exceptions.UserNotFoundException;
 import traffic_id.demo.model.User;
+import traffic_id.demo.service.PasswordDto;
 import traffic_id.demo.service.UserDto;
 
 public interface IUserService {
-    User registerNewUserAccount(UserDto userDto) throws EmailAlreadyExistException, LoginAlreadyExistException, 
+    User registerNewUserAccount(UserDto userDto, PasswordDto passwordDto) throws EmailAlreadyExistException, LoginAlreadyExistException, 
+                                                        PasswordIncorrectException, UserNotFoundException;
+    User editUserAccount(UserDto userDto) throws EmailAlreadyExistException, LoginAlreadyExistException, 
                                                         PasswordIncorrectException, UserNotFoundException;
 }

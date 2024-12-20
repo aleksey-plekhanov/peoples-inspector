@@ -18,10 +18,6 @@ public class ViolationType {
     @Column(name="Вид", nullable = false, columnDefinition="VARCHAR(128)", unique=true)
     private String typeName;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "type")
-    private Set<Violation> violations = new LinkedHashSet<>();
-
     public ViolationType() {
     }
 
@@ -35,14 +31,6 @@ public class ViolationType {
     
     public void setTypeName(String typeName) {
         this.typeName = typeName;
-    }
-    
-    public Set<Violation> getViolations() {
-        return violations;
-    }
-    
-    public void setViolations(Set<Violation> violations) {
-        this.violations = violations;
     }
 
     @Override

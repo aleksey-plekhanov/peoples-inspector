@@ -21,29 +21,15 @@ public class ModeratorController {
     @Autowired
     private UserService userService;
 
-    @GetMapping()
-    public String moderatorList(Model model) {
-        model.addAttribute("allModerators", userService.allModerators());
-        return "moderator";
+    @GetMapping("/user/all")
+    public String userList(Model model) {
+        model.addAttribute("allUsers", userService.allUsers());
+        return "user";
     }
 
-    @PostMapping("/add")
-    public String addModerator(@RequestParam(required = true, defaultValue = "" ) Integer userId,
-                              Model model) {
-        userService.addModerator(userId);
-        return "redirect:/moderator";
-    }
-
-    @PostMapping("/remove")
-    public String removeModerator(@RequestParam(required = true, defaultValue = "" ) Integer moderatorId,
-                              Model model) {
-        userService.removeModerator(moderatorId);
-        return "redirect:/moderator";
-    }
-
-    @GetMapping("/{moderatorId}")
-    public String getModerator(@PathVariable Integer moderatorId, Model model) {
-        model.addAttribute("allModerators", userService.findModeratorById(moderatorId));
-        return "moderator";
+    @GetMapping("/user/get/{userId}")
+    public String getUser(@PathVariable Integer userId, Model model) {
+        model.addAttribute("allUsers", userService.findUserById(userId));
+        return "user";
     }
 }

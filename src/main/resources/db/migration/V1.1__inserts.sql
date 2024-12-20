@@ -216,11 +216,9 @@ INSERT INTO traffic_offensive.public.violation (Статья, Название, 
 INSERT INTO traffic_offensive.public.violation (Статья, Название, Наказание, Вид) VALUES ('12.33', 'Повреждение дорог, железнодорожных переездов или других дорожных сооружений либо технических средств организации дорожного движения, которое создает угрозу безопасности дорожного движения, а равно умышленное создание помех в дорожном движении, в том числе путем загрязнения дорожного покрытия', '5 000 - 10 000 руб.', 'Временное название');
 INSERT INTO traffic_offensive.public.violation (Статья, Название, Наказание, Вид) VALUES ('12.361', 'Пользование водителем во время движения транспортного средства телефоном, не оборудованным техническим устройством, позволяющим вести переговоры без использования рук', '1 500 руб.', 'Временное название');
 
-INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('Черновик');
-INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('Опубликовано');
-INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('Отправлен на доработку');
+INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('Одобрено');
+INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('Отклонено');
 INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('На рассмотрении');
-INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('Зарегистрировано');
 
     INSERT INTO traffic_offensive.public.district ("Район") VALUES ('Наримановский');
     INSERT INTO traffic_offensive.public.district ("Район") VALUES ('Кировский');
@@ -237,3 +235,7 @@ INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('Зарег
     INSERT INTO traffic_offensive.public.district ("Район") VALUES ('Приволжский');
     INSERT INTO traffic_offensive.public.district ("Район") VALUES ('Харабалинский');
     INSERT INTO traffic_offensive.public.district ("Район") VALUES ('Черноярский');
+
+INSERT INTO traffic_offensive.public.file_type ("Тип файла") VALUES ('Фото');
+INSERT INTO traffic_offensive.public.file_type ("Тип файла") VALUES ('Видео');
+INSERT INTO traffic_offensive.public.file_type ("Тип файла") VALUES ('Аудио');

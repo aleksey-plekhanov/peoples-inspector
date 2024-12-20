@@ -20,6 +20,7 @@ public class UserData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user_data")
     private Integer userDataId;
 
     @Column(name="Логин", nullable = false, columnDefinition="VARCHAR(128)", unique=true)
@@ -33,9 +34,8 @@ public class UserData {
     @Column(name="Электронная почта", nullable = false, columnDefinition="VARCHAR(128)", unique=true)
     private String email;
 
-    @JdbcTypeCode(Types.BINARY)
-    @Column(name="Аватар", columnDefinition="bytea")
-    private byte[] avatar;
+    @Column(name="Аватар", columnDefinition="varchar(2083)")
+    private String avatar;
 
     @JsonIgnore
     @Transient
@@ -48,7 +48,7 @@ public class UserData {
     @OneToOne(mappedBy = "data", cascade = CascadeType.ALL)
     private User user;
 
-    public UserData(Integer userDataId, String login, String password, String email, byte[] avatar, String roles) {
+    public UserData(Integer userDataId, String login, String password, String email, String avatar, String roles) {
         this.userDataId = userDataId;
         this.login = login;
         this.password = password;
@@ -100,11 +100,11 @@ public class UserData {
         this.email = email;
     }
 
-    public byte[] getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 
@@ -127,7 +127,7 @@ public class UserData {
     @Override
     public String toString() {
         return "UserData [userDataId=" + userDataId + ", login=" + login + ", email=" + email 
-                + ", avatar=" + Arrays.toString(avatar) + ", roles=" + roles + ", user=" + user.getId() + "]";
+                + ", avatar=" + avatar + ", roles=" + roles + ", user=" + user.getId() + "]";
     }
 
 }

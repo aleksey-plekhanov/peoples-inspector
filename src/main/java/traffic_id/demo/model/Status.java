@@ -18,10 +18,6 @@ public class Status {
     @Column(name="Статус", nullable = false, columnDefinition="VARCHAR(25)", unique=true)
     private String statusName;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "status")
-    private Set<Application> applications = new LinkedHashSet<>();
-
     public Status(String statusName) {
         this.statusName = statusName;
     }
@@ -35,14 +31,6 @@ public class Status {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
-    }
-
-    public Set<Application> getApplications() {
-        return applications;
-    }
-
-    public void setApplications(Set<Application> applications) {
-        this.applications = applications;
     }
 
     @Override

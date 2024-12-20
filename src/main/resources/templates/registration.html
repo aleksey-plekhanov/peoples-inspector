@@ -10,7 +10,7 @@
 </head> 
     <body>
         <div class="wrapper">
-            <form th:action="@{/registration/save}" th:object="${user}" method="POST" enctype="utf8">
+            <form th:action="@{/registration/save}" th:object="${userDto}" method="POST" enctype="utf8">
                 <h1>Регистрация</h1>
 
                 <div class="input-box">
@@ -43,11 +43,11 @@
                         th:if="${#fields.hasErrors('email')}"></err>
                 </div>
 
-                <div class="input-box">
+                <div class="input-box" th:object="${passwordDto}">
                     <input th:field="*{password}" type="password" placeholder="Пароль" required>
                 </div>
 
-                <div class="input-box">
+                <div class="input-box" th:object="${passwordDto}">
                     <input th:field="*{matchingPassword}" type="password" placeholder="Подтвердите пароль" required>
                     <err th:errors = "*{password}" class="text-danger"
                         th:if="${#fields.hasErrors('password')}"></err>

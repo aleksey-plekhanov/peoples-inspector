@@ -15,9 +15,9 @@ public class Application {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_application")
     private Integer applicationId;
 
-    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Заявитель", nullable = false, unique=false)
     private User user;
@@ -25,15 +25,15 @@ public class Application {
     @Column(name = "Название", nullable = false, columnDefinition="varchar(50)")
     private String title;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Данные", nullable = false, unique=true)
-    private ApplicationData applicationData;
+    @Column(name = "Информация", nullable = false, columnDefinition="text")
+    private String information;
 
     @Column(name = "Время поступления", nullable = true, columnDefinition="date")
     private Date dateArrive;
 
-    @JsonIdentityReference(alwaysAsId = true)
+    @Column(name = "Время нарушения", nullable = false, columnDefinition="date")
+    private Date dateViolation;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Район", nullable = false, unique=false)
     private District district;
@@ -41,12 +41,10 @@ public class Application {
     @Column(name = "Адрес", nullable = false, columnDefinition="varchar(100)")
     private String address;
 
-    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Статус", nullable = false, unique=false)
     private Status status;
 
-    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Модератор", nullable = true, unique=false)
     private Moderator moderator;
@@ -57,13 +55,14 @@ public class Application {
     @Column(name = "Время проверки", nullable = true, columnDefinition="date")
     private Date dateCheck;
 
-    public Application(Integer applicationId, User user, String title, ApplicationData applicationData, Date dateArrive,
+    public Application(Integer applicationId, User user, String title, String information, Date dateArrive, Date dateViolation,
             District district, String address, Status status, Moderator moderator, String commentary, Date dateCheck) {
         this.applicationId = applicationId;
         this.user = user;
         this.title = title;
-        this.applicationData = applicationData;
+        this.information = information;
         this.dateArrive = dateArrive;
+        this.dateViolation = dateViolation;
         this.district = district;
         this.address = address;
         this.status = status;
@@ -72,10 +71,11 @@ public class Application {
         this.dateCheck = dateCheck;
     }
 
-    public Application(User user, String title, ApplicationData applicationData, District district, String address, Status status) {
+    public Application(User user, String title, String information, Date dateViolation, District district, String address, Status status) {
         this.user = user;
         this.title = title;
-        this.applicationData = applicationData;
+        this.information = information;
+        this.dateViolation = dateViolation;
         this.district = district;
         this.address = address;
         this.status = status;
@@ -84,10 +84,10 @@ public class Application {
     public Application() {
     }
 
-    public Integer getIdapplication() {
+    public Integer getId() {
         return applicationId;
     }
-
+    
     public void setId(Integer applicationId) {
         this.applicationId = applicationId;
     }
@@ -108,12 +108,12 @@ public class Application {
         this.title = title;
     }
 
-    public ApplicationData getData() {
-        return applicationData;
+    public String getInformation() {
+        return information;
     }
 
-    public void setData(ApplicationData applicationData) {
-        this.applicationData = applicationData;
+    public void setInformation(String information) {
+        this.information = information;
     }
 
     public Date getDateArrive() {
@@ -122,6 +122,14 @@ public class Application {
 
     public void setDateArrive(Date dateArrive) {
         this.dateArrive = dateArrive;
+    }
+
+    public Date getDateViolation() {
+        return dateViolation;
+    }
+
+    public void setDateViolation(Date dateViolation) {
+        this.dateViolation = dateViolation;
     }
 
     public District getDistrict() {
@@ -174,8 +182,8 @@ public class Application {
 
     @Override
     public String toString() {
-        return "Application [applicationId=" + applicationId + ", user=" + user + ", title=" + title + ", applicationData="
-                + applicationData + ", dateArrive=" + dateArrive + ", district=" + district + ", address=" + address 
+        return "Application [applicationId=" + applicationId + ", user=" + user + ", title=" + title + ", information="
+                + information + ", dateArrive=" + dateArrive + ", dateViolation=" + dateViolation + ", district=" + district + ", address=" + address 
                 + ", status=" + status + ", moderator=" + moderator + ", commentary=" + commentary + ", dateCheck=" + dateCheck + "]";
     }
 }

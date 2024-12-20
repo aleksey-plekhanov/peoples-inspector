@@ -15,12 +15,8 @@ import jakarta.persistence.*;
 public class FileType {
     
     @Id
-    @Column(name="Тип файла", nullable = false, columnDefinition="varchar(2083)", unique=true)
+    @Column(name="Тип файла", nullable = false, columnDefinition="varchar(5)", unique=true)
     private String typeName;
-
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "type")
-    private Set<File> files = new LinkedHashSet<>();
 
     public FileType(String typeName) {
         this.typeName = typeName;
@@ -35,14 +31,6 @@ public class FileType {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
-    }
-
-    public Set<File> getFiles() {
-        return files;
-    }
-
-    public void setFiles(Set<File> files) {
-        this.files = files;
     }
 
     @Override

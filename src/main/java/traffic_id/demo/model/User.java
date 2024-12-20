@@ -17,6 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user")
     private Integer id;
 
     @Column(name="Фамилия", nullable = false, columnDefinition="VARCHAR(50)")
@@ -28,21 +29,12 @@ public class User {
     @Column(name="Отчество", columnDefinition="VARCHAR(50)")
     private String patronymic;
 
-    @JsonIdentityReference(alwaysAsId = true)
     @OneToOne(cascade=CascadeType.ALL, optional = false)
     @JoinColumn(name = "Данные")
     private UserData data;
 
     @Column(name = "Дата регистрации", nullable = true, columnDefinition="date")
     private Date registration;
-
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "user")
-    private Set<Moderator> moderators = new LinkedHashSet<>();
-
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "user")
-    private Set<Application> applications = new LinkedHashSet<>();
 
     public User(Integer userId, String surname, String name, String patronymic, UserData data, Date registration) {
         this.id = userId;
@@ -102,14 +94,6 @@ public class User {
 
     public void setRegistration(Date registration) {
         this.registration = registration;
-    }
-    
-    public Set<Moderator> getModerators() {
-        return moderators;
-    }
-
-    public void setModerators(Set<Moderator> moderators) {
-        this.moderators = moderators;
     }
 
     @Override

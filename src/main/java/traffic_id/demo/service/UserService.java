@@ -43,7 +43,7 @@ public class UserService implements IUserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public User registerNewUserAccount(UserDto userDto) throws EmailAlreadyExistException, LoginAlreadyExistException, 
+    public User registerNewUserAccount(UserDto userDto, PasswordDto passwordDto) throws EmailAlreadyExistException, LoginAlreadyExistException, 
                                                                 PasswordIncorrectException, UserNotFoundException {
         if (emailExists(userDto.getEmail())) {
             throw new EmailAlreadyExistException("Аккаунт с данной почтой уже существует: "
@@ -55,19 +55,52 @@ public class UserService implements IUserService {
               + userDto.getLogin());
         }
 
-        if (!userDto.getPassword().equals(userDto.getMatchingPassword())) {
+        if (!passwordDto.getPassword().equals(passwordDto.getMatchingPassword())) {
             throw new PasswordIncorrectException("Пароли не совпадают");
         }
 
-        UserData userData = new UserData(null, userDto.getLogin(), bCryptPasswordEncoder.encode(userDto.getPassword()),
+        UserData userData = new UserData(null, userDto.getLogin(), bCryptPasswordEncoder.encode(passwordDto.getPassword()),
                                             userDto.getEmail(), null, "ROLE_USER");
         userDataRepository.save(userData);
 
         UserData addedData = userDataRepository.findByLogin(userDto.getLogin());
-        if(addedData == null) throw new UserNotFoundException("Пользователь не добавился");
+        
         User user = new User(null, userDto.getSurname(), userDto.getName(), userDto.getPatronymic(),
                             addedData, new Date());
 
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User editUserAccount(UserDto userDto) throws EmailAlreadyExistException, LoginAlreadyExistException, 
+                                                            PasswordIncorrectException, UserNotFoundException {
+        
+        UserData userData = userDataRepository.findByLogin(userDto.getLogin());
+        
+        if (!userDto.getEmail().equals(userData.getEmail()))
+        {
+            if (emailExists(userDto.getEmail())) {
+                throw new EmailAlreadyExistException("Аккаунт с данной почтой уже существует: "
+                + userDto.getEmail());
+            }
+        }
+
+        if (!userDto.getLogin().equals(userData.getLogin()))
+        {
+            if (loginExists(userDto.getLogin())) {
+                throw new LoginAlreadyExistException("Аккаунт с данным логином уже существует: "
+                + userDto.getLogin());
+            }
+        }
+        
+        userData.setEmail(userDto.getEmail());
+        userData.setLogin(userDto.getLogin());
+        userDataRepository.save(userData);
+        
+        User user = userRepository.findByData(userData).get();
+        user.setName(userDto.getName());
+        user.setSurname(userDto.getSurname());
+        user.setPatronymic(userDto.getPatronymic());
         return userRepository.save(user);
     }
 
@@ -93,13 +126,7 @@ public class UserService implements IUserService {
     }
 
     public List<User> allUsers() {
-        List<User> us = userRepository.findAll();
         return userRepository.findAll();
-    }
-    
-    public List<User> usergtList(Integer idMin) {
-        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
     }
 
     public Moderator findModeratorById(Integer moderatorId) {

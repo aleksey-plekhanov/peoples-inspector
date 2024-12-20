@@ -1,5 +1,7 @@
 package traffic_id.demo.repository;
 
+import java.util.Date;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 
@@ -8,8 +10,11 @@ import traffic_id.demo.model.Application;
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
 
     @Procedure("application_create")
-    void createApplication(Integer id_user, String title, Integer id_data, String district, String address, String status);
+    Integer createApplication(Integer id_user, String title, String information, Date dateViolation, String district, String address, String status);
 
     @Procedure("application_moderate")
     void moderateApplication(Integer id_app, Integer moderator, String commentary, String status);
+
+    @Procedure("application_get_data")
+    void getApplicationData(Integer id_app, String[] filePath, String[] violations);
 }

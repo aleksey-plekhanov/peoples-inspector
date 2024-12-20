@@ -1,5 +1,6 @@
 package traffic_id.demo.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -37,15 +38,20 @@ public class FileService {
 
     /**
      * Сохраняет загруженный файл в указанном месте.
-     * @param file Многостраничный файл, который нужно сохранить
+     * @param files Многостраничные файлы, которые нужно сохранить
+     * @param applicationFolder ID папки заявления
      */
-    public void saveFile(MultipartFile file, String applicationFolder) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        try {
-            Path targetLocation = this.fileStorageLocation.resolve(applicationFolder).resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            throw new RuntimeException("Не удалось сохранить файл " + fileName + ". Пожалуйста, попробуйте снова!", ex);
+    public void saveFiles(MultipartFile[] files, String applicationFolder) {
+        for (MultipartFile file : files)
+        {
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            try {
+                Path targetLocation = this.fileStorageLocation.resolve(applicationFolder);
+                Files.createDirectories(targetLocation);
+                Files.copy(file.getInputStream(), targetLocation.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ex) {
+                throw new RuntimeException("Не удалось сохранить файл " + fileName + ". Пожалуйста, попробуйте снова!", ex);
+            }
         }
     }
 
@@ -53,13 +59,22 @@ public class FileService {
      * Добавляет файлы в БД.
      * @param file Многостраничный файл, который нужно сохранить
      */
-    public void saveFilesIntoDB(List<String> files, Integer idData, String type) {
-        for (String file : files)
+    public Boolean saveFilesIntoDB(MultipartFile[] files, Integer idData) {
+        for (MultipartFile file : files)
         {
-            Path path = this.fileStorageLocation.resolve(idData.toString()).resolve(file);
-            path.toString();
-            fileRepository.addFile(idData, path.toString(), type);
+            String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+            switch (extension)
+            {
+                case "png", "jpeg", "jpg" -> extension = "Фото";
+                case "mp4", "m4v", "m4p", "wmv" -> extension = "Видео";
+                case "mp3", "aac", "wma", "aiff" -> extension = "Фото";
+                default -> {return false;}
+            }
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            Path path = this.fileStorageLocation.resolve(idData.toString()).resolve(fileName);
+            fileRepository.addFile(idData, path.toString(), extension);
         }
+        return true;
     }
 
     /**
@@ -79,6 +94,20 @@ public class FileService {
         } catch (MalformedURLException ex) {
             throw new RuntimeException("Файл не найден " + fileName, ex);
         }
+    }
+
+    /**
+     * Конвертирует путь в MultipartFile.
+     * @return MultipartFile
+     */
+    public MultipartFile[] convertStringsToMultipartFiles(String[] paths) {
+        MultipartFile[] files = new MultipartFile[paths.length];
+        for (int i = 0; i < paths.length; i++)
+        {
+            File file = new File(paths[i]);
+            //files[i] = new CommonsMultipartFile(file);
+        }
+        return files;
     }
 
     /**

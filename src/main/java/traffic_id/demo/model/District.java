@@ -11,16 +11,12 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "district")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "districtName")
 public class District {
 
     @Id
     @Column(name="Район", nullable = false, columnDefinition="VARCHAR(30)", unique=true)
     private String districtName;
-
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "district")
-    private Set<Application> applications = new LinkedHashSet<>();
 
     public District(String districtName) {
         this.districtName = districtName;
@@ -35,14 +31,6 @@ public class District {
 
     public void setDistrictName(String districtName) {
         this.districtName = districtName;
-    }
-
-    public Set<Application> getApplications() {
-        return applications;
-    }
-
-    public void setApplications(Set<Application> applications) {
-        this.applications = applications;
     }
 
     @Override
