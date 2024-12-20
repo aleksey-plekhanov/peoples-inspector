@@ -160,8 +160,7 @@
           </div>
           <div class="form-group" style="margin: 0 auto;">
             <label for="username">Правонарушение</label>
-            <select name="pets" id="pet-select" class="form-control">
-              <option value="-1">Выберите правонарушение</option>
+            <select name="pets" id="pet-select2" class="form-control" multiple>
               <option value="0">Кировский район</option>
               <option value="1">Трусовский район</option>
               <option value="2">Ленинский район</option>
@@ -239,6 +238,13 @@
   <!-- Main JS File -->
 
   <script>
+        
+    window.addEventListener('change', () => {
+        const violationSelect = document.getElementById('pet-select');
+        const selectedOptions = Array.from(document.getElementById('pet-select').selectedOptions).map(option => option.value);
+        console.log('Выбранные правонарушения:', selectedOptions);
+    });
+
     window.addEventListener('load', () => {
       const datetime = new Date().toISOString().slice(0, -8);
       document.getElementById('dateOfApplication').value = datetime;

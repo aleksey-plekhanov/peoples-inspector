@@ -6,6 +6,15 @@
 * License: https://bootstrapmade.com/license/
 */
 
+document.querySelector('select[multiple]').addEventListener('mousedown', (e) => {
+  if (e.target.tagName === 'OPTION') {
+    e.preventDefault(); // Отменяем действие по умолчанию
+    const option = e.target;
+    option.selected = !option.selected; // Инвертируем выбранный элемент
+    e.target.parentNode.dispatchEvent(new Event('change')); // Генерируем событие изменения
+  }
+});
+
 (function() {
   "use strict";
 
