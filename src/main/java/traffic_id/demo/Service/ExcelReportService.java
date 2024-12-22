@@ -56,7 +56,10 @@ public class ExcelReportService {
             row.createCell(4).setCellValue(application.getDistrict().getDistrictName());
             row.createCell(5).setCellValue(application.getAddress());
             row.createCell(6).setCellValue(application.getStatus().getStatusName());
-            row.createCell(7).setCellValue(application.getModerator().getUser().getName());
+            if (application.getModerator() != null)
+                row.createCell(7).setCellValue(application.getModerator().getUser().getName());
+            else
+                row.createCell(7).setCellValue("");
             row.createCell(8).setCellValue(application.getCommentary());
             row.createCell(9).setCellValue(application.getDateCheck());
         }

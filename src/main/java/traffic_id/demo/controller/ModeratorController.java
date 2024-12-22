@@ -27,7 +27,7 @@ public class ModeratorController {
         return "user";
     }
 
-    @GetMapping("/user/get/{userId}")
+    @GetMapping("/user/{userId}")
     public String getUser(@PathVariable Integer userId, Model model) {
         model.addAttribute("allUsers", userService.findUserById(userId));
         return "user";

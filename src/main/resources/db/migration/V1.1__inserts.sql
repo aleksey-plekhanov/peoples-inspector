@@ -239,3 +239,6 @@ INSERT INTO traffic_offensive.public.status ("Статус") VALUES ('На ра�
 INSERT INTO traffic_offensive.public.file_type ("Тип файла") VALUES ('Фото');
 INSERT INTO traffic_offensive.public.file_type ("Тип файла") VALUES ('Видео');
 INSERT INTO traffic_offensive.public.file_type ("Тип файла") VALUES ('Аудио');
+
+INSERT INTO traffic_offensive.public.user_data ("Логин", "Пароль", "Электронная почта") 
+VALUES ('admintraffic', '$2a$10$8geai0HJIFjMfojN0xmzbuEVKrEGo4CQEi6Isym8QPCn2YOsF3C9C', 'slava_samodurov@mail.ru');

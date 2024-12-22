@@ -27,6 +27,8 @@ public class UserDto {
     @NotEmpty
     @Size(min=2, message = "Не меньше 2 знаков")
     private String login;
+
+    private String avatar;
     
     public UserDto(User user) {
         surname = user.getSurname();
@@ -35,6 +37,7 @@ public class UserDto {
         UserData userData = user.getData();
         email = userData.getEmail();
         login = userData.getLogin();
+        avatar = userData.getAvatar();
     }
 
     public UserDto() {
@@ -79,4 +82,13 @@ public class UserDto {
     public void setLogin(String login) {
         this.login = login;
     }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }
+

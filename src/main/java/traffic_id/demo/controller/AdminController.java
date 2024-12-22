@@ -5,38 +5,52 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import traffic_id.demo.service.UserService;
 
 @RestController
+@RequestMapping("admin")
 public class AdminController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/admin/moderator")
+    @GetMapping("/user/all")
+    public String userList(Model model) {
+        model.addAttribute("allUsers", userService.allUsers());
+        return "user";
+    }
+
+    @GetMapping("/user/{userId}")
+    public String getUser(@PathVariable Integer userId, Model model) {
+        model.addAttribute("allUsers", userService.findUserById(userId));
+        return "user";
+    }
+
+    @GetMapping("/moderator/all")
     public String moderatorList(Model model) {
         model.addAttribute("allModerators", userService.allModerators());
         return "moderator";
     }
 
-    @PostMapping("/admin/moderator/add")
+    @PostMapping("/moderator/add")
     public String addModerator(@RequestParam(required = true, defaultValue = "" ) Integer userId,
                               Model model) {
         userService.addModerator(userId);
         return "redirect:/moderator";
     }
 
-    @PostMapping("/admin/moderator/remove")
+    @PostMapping("/moderator/remove")
     public String removeModerator(@RequestParam(required = true, defaultValue = "" ) Integer moderatorId,
                               Model model) {
         userService.removeModerator(moderatorId);
         return "redirect:/moderator";
     }
 
-    @GetMapping("/admin/moderator/{moderatorId}")
+    @GetMapping("/moderator/{moderatorId}")
     public String getModerator(@PathVariable Integer moderatorId, Model model) {
         model.addAttribute("allModerators", userService.findModeratorById(moderatorId));
         return "moderator";

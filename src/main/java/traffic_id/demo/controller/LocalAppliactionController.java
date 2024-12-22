@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,8 @@ public class LocalAppliactionController {
     @Autowired
     private LocalApplicationService localApplicationService;
 
+    private ApplicationDto unsendApplication = null;
+
     @GetMapping("/moderator/application")
     public List<Application> getAllApplication() {
         return localApplicationService.allApplications();
@@ -47,7 +50,7 @@ public class LocalAppliactionController {
     }
 
     @PostMapping("/moderator/application/send")
-    public String sendApplicationByModerator(@Validated @ModelAttribute ApplicationDto applicationDto, BindingResult result, Model model) {
+    public String sendApplicationByModerator(@ModelAttribute ApplicationDto applicationDto, BindingResult result, Model model) {
         localApplicationService.sendApplicationByModerator(applicationDto);
         return "applicationByModerator";
     }
@@ -59,12 +62,17 @@ public class LocalAppliactionController {
 
     @GetMapping("/moderator/application/data/violation")
     public List<ApplicationViolation> getAllApplicationViolation() {
-        return localApplicationService.getAllApplicationViolation();
+        return localApplicationService.getAllApplicationViolations();
     }
 
     @GetMapping("/user/application")
     public String createApplication(Model model) {
-        model.addAttribute("applicationDto", new ApplicationDto());
+        if (unsendApplication != null)
+            model.addAttribute("applicationDto", unsendApplication);
+        else 
+            model.addAttribute("applicationDto", new ApplicationDto());
+
+        model.addAttribute("applications", localApplicationService.getAllUserApplications());
         model.addAttribute("districts", localApplicationService.getAllDistricts());
         model.addAttribute("violations", localApplicationService.getAllViolations());
         return "applicationForUser";
@@ -72,6 +80,7 @@ public class LocalAppliactionController {
 
     @PostMapping("/user/application/send")
     public String sendApplicationForUser(@Validated @ModelAttribute ApplicationDto applicationDto, @RequestParam MultipartFile[] files, BindingResult result, Model model) {
+        unsendApplication = null;
         localApplicationService.sendApplicationDto(applicationDto, files, "На рассмотрении");
         return "redirect:/user/application";
     }
@@ -83,8 +92,11 @@ public class LocalAppliactionController {
     // }
 
     @GetMapping("/user/application/{applicationId}")
-    public String getApplicationForUser(@PathVariable Integer applicationId, Model model) {
-        Application application = localApplicationService.findApplicationById(applicationId);
+    public String getApplicationForUser(@PathVariable Integer applicationId, @ModelAttribute ApplicationDto applicationDto, Model model) {
+        if (applicationDto != null)
+            unsendApplication = applicationDto;
+        
+            Application application = localApplicationService.findApplicationById(applicationId);
         if (application == null)
             //TO DO: переделать return в bad gateway
             return "applicationForUser";
@@ -93,17 +105,18 @@ public class LocalAppliactionController {
             //TO DO: переделать return в bad gateway
             return "applicationForUser";
 
-        model.addAttribute("applicationDto", localApplicationService.getApplicationDto(application));
-        model.addAttribute("districts", localApplicationService.getAllDistricts());
-        model.addAttribute("violations", localApplicationService.getAllViolations());
-        return "applicationForUser";
+        model.addAttribute("localApplication", application);
+        model.addAttribute("applications", localApplicationService.getAllUserApplications());
+        model.addAttribute("violations", localApplicationService.getApplicationViolations(application));
+        model.addAttribute("files", localApplicationService.getApplicationFiles(application));
+        return "application";
     }
 
     /**
      * Загрузка файла из системы к пользователю
      */ 
-    @GetMapping("/moderator/application/downloadFile")
-    public ResponseEntity<Resource> downloadFile(@RequestParam MultipartFile file, @ModelAttribute ApplicationDto applicationDto) {
-        return localApplicationService.downloadFile(file, applicationDto);
+    @GetMapping("/application/download/{file}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String file, @ModelAttribute ApplicationDto applicationDto) {
+        return localApplicationService.downloadFile(file, applicationDto.getApplicationId());
     }
 }

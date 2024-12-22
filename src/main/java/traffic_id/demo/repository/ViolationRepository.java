@@ -15,4 +15,6 @@ public interface ViolationRepository extends JpaRepository<Violation, String> {
     //             "and upper(\"Вид\") LIKE CONCAT('%',upper(:type_viol),'%') " + 
     //             "and upper(\"Наказание\") LIKE CONCAT('%',upper(:punishment),'%')", nativeQuery = true)
     // List<Violation> findViolation(String article, String title, String type_viol, String punishment);
+
+    Violation findByArticle(String article);
 }

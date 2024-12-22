@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -23,25 +24,26 @@ import traffic_id.demo.service.UserDto;
 import traffic_id.demo.service.UserService;
 
 @Controller
+@RequestMapping("user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user")
+    @GetMapping()
     public String getUserAccount(Model model) {
         String userLogin = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         User user = userService.findUserByLogin(userLogin);
-        model.addAttribute("user", new UserDto(user));
+        model.addAttribute("userDto", new UserDto(user));
         return "user";
     }
 
-    @PostMapping("/user/save")
-    public String editUserAccount(@Validated @ModelAttribute("user") UserDto userDto,
+    @PostMapping("/save")
+    public String editUserAccount(@Validated @ModelAttribute UserDto userDto,
                             BindingResult result, Model model) {
         
         if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
+            model.addAttribute("userDto", userDto);
             return "user";
         }
 
@@ -58,7 +60,7 @@ public class UserController {
         }
 
         if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
+            model.addAttribute("userDto", userDto);
             return "user";
         }
         

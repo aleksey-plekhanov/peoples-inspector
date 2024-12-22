@@ -36,15 +36,18 @@ public class ApplicationDto {
     @NotEmpty
     private String address;
     
+    private Date dateArrive;
     private String commentary;
     private String status;
     private List<String> violations;
 
-    public ApplicationDto(Integer applicationId, User user, String information, String title, String district, String address,
-    String commentary, String status, String[] violations) {
+    public ApplicationDto(Integer applicationId, User user, String information, Date dateViolation, Date dateArrive, 
+    String title, String district, String address, String commentary, String status, String[] violations) {
         this.applicationId = applicationId;
         this.user = user;
         this.information = information;
+        this.dateViolation = dateViolation;
+        this.dateArrive = dateArrive;
         this.title = title;
         this.district = district;
         this.address = address;
@@ -104,6 +107,14 @@ public class ApplicationDto {
 
     public void setDateViolation(Date dateViolation) {
         this.dateViolation = dateViolation;
+    }
+
+    public Date getDateArrive() {
+        return dateArrive;
+    }
+
+    public void setDateArrive(Date dateArrive) {
+        this.dateArrive = dateArrive;
     }
 
     public String getDistrict() {

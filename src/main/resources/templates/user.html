@@ -39,35 +39,37 @@
     <div
       class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" th:href="@{index.html}" class="logo d-flex align-items-center me-auto me-xl-0">
+      <a href="index.html" th:href="@{/}" class="logo d-flex align-items-center me-auto me-xl-0">
         <h1>Народный инспектор</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html#hero" th:href="@{index.html#hero}">Главная</a></li>
-          <li><a href="user.html" th:href="@{user}">Личный кабинет</a></li>
-          <li><a href="index.html#faq" th:href="@{index.html#faq}">FAQ</a></li>
+          <li><a href="index.html#hero" th:href="@{/#hero}">Главная</a></li>
+          <li><a href="user.html" th:href="@{/user}">Личный кабинет</a></li>
+          <li><a href="index.html#faq" th:href="@{/#faq}">FAQ</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-      <a class="btn-getstarted" href="applicationForUser.html" th:href="@{user/application}">Добавить правонарушение</a>
+      <a class="btn-getstarted" href="applicationForUser.html" th:href="@{/user/application}">Добавить правонарушение</a>
     </div>
   </header>
 
   <main class="main">
-    <form th:action="@{/user/save}" th:object="${user}" method="POST" enctype="utf8">
+    <form th:action="@{/user/save}" th:object="${userDto}" method="POST" enctype="utf8">
       <div class="page-title light-background">
         <h1>Личный кабинет</h1>
         <div class="container my-5">
           <div class="row">
             <div class="col-md-4">
               <div class="text-center mb-4" style="margin-top: 30%;">
-                <img src="../static/img/about-2.webp" th:src="@{img/about-2.webp}" alt="Profile Image"
+                <!-- Переделать -->
+                <img th:src="@{*{avatar}}" alt="@{img/about-2.webp}"
                   class="profile-image">
                 <div class="mt-3">
-                  <button type="submit" class="btn-lk" onclick="authUser()">Загрузить фото</button>
-                  <button type="submit" class="btn-lk" onclick="authUser()">Удалить фото</button>
+                  <input type="file" name="file" id="file-upload" class="file-upload" accept="image/*">Загрузить фото</button>
+                  <input th:field="*{avatar}" type="text" name="avatar" hidden/>
+                  <button type="button" class="btn-lk" id="file-delete" th:attr="onclick=|*{avatar}=null|">Удалить фото</button>
                 </div>
               </div>
             </div>
@@ -117,7 +119,7 @@
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" th:href="@{index.html}" class="logo d-flex align-items-center">
+          <a href="index.html" th:href="@{/}" class="logo d-flex align-items-center">
             <span class="sitename">Народный инспектор</span>
           </a>
           <div class="footer-contact pt-3">
@@ -134,11 +136,11 @@
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Разделы сайта</h4>
           <ul>
-            <li><a href="index.html#hero" th:href="@{index.html#hero}">Главная</a></li>
-            <li><a href="index.html#about" th:href="@{index.html#about}">О портале</a></li>
-            <li><a href="user.html" th:href="@{user}">Личный кабинет</a></li>
-            <li><a href="applicationForUser.html" th:href="@{user/application}">Заявить о правонарушении</a></li>
-            <li><a href="index.html#faq" th:href="@{index.html#faq}">FAQ</a></li>
+            <li><a href="index.html#hero" th:href="@{/#hero}">Главная</a></li>
+            <li><a href="index.html#about" th:href="@{/#about}">О портале</a></li>
+            <li><a href="user.html" th:href="@{/user}">Личный кабинет</a></li>
+            <li><a href="applicationForUser.html" th:href="@{/user/application}">Заявить о правонарушении</a></li>
+            <li><a href="index.html#faq" th:href="@{/#faq}">FAQ</a></li>
           </ul>
         </div>
       </div>

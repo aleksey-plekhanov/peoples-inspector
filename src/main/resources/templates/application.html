@@ -75,7 +75,7 @@
           <div th:each="app : ${applications}" class="application-list" >
             <button class="application-item" th:formaction="'/user/application/'+${app.id}">
               <div class="row mainblock">
-                <div th:text="'№ ' + ${app.id}" name="appId" class="number"></div>
+                <div th:text="'№ ' + ${app.id}" class="number"></div>
                 <div th:text="${app.title}" class="name"></div>
               </div>
               <div class="row mainblock">
@@ -87,46 +87,48 @@
         </form>
       </div>
       <div class="col-md-8" style="padding: 2%;">
-        <form th:action="@{/user/application/send}" th:object="${applicationDto}" method="POST" enctype="multipart/form-data">
-          <h1 style="font-size: 36px;">Создание заявления</h1>
-            <div class="form-group" style="margin: 0 auto;">
-              <label for="titleName">Название</label>
-              <input th:field="*{title}" type="text" class="form-control" id="titleName" placeholder="Введите название заявления" required>
+        <form th:object="${localApplication}">
+          <div class="form-group" style="margin: 0 auto;">
+            <label th:text="*{title}"></label>
+            <div class="lineInformation">
+              <div th:text="'№ ' + *{id}" class="number"></div>
+              <div th:text="*{status.statusName}" class="status">Одобрено</div>
+              <div th:text="${#dates.format(localApplication.dateArrive, 'dd.MM.yyyy')}" class="date"></div>
             </div>
-            <div class="form-group" style="margin: 0 auto;">
-              <label for="dateViolation">Дата и время происшествия</label>
-              <input th:field="*{dateViolation}" name="dateViolation" type="datetime-local" class="form-control" id="dateOfApplication" placeholder="Выберите дату и время" required>
-            </div>
-            <div class="form-group" style="margin: 0 auto;">
-              <label for="district">Район</label>
-              <select th:field="*{district}" name="district" id="district" class="form-control" required>
-                <option th:each="distr : ${districts}" th:value="${distr.districtName}" th:text="${distr.districtName}"></option>
-              </select>
-            </div>
-            <div class="form-group" style="margin: 0 auto;">
-              <label for="address">Приблизительный адрес</label>
-              <input th:field="*{address}" type="text" class="form-control" id="address" placeholder="Введите адрес" required>
-            </div>
-            <div class="form-group" style="margin: 0 auto;">
-              <label for="violation">Правонарушение</label>
-              <select th:field="*{violations}" name="violations" id="violations" class="form-control" multiple required>
-                <option th:each="viol : ${violations}" th:value="${viol.article}" th:text="${viol.article} + ' ' + ${viol.name}"></option>
-              </select>
-            </div>
-            <div class="form-group" style="margin: 0 auto;">
-              <label for="information">Описание</label>
-              <textarea th:field="*{information}" id="information" class="form-control" style="height: 113px !important;" rows="2" cols="20" wrap="hard" placeholder="Опишите ситуацию" required></textarea>
-            </div>
-            <div class="form-group" style="margin: 0 auto;">
-              <label for="uploaded-files">Прикрепленные файлы</label>
-              <label class="upload-button" for="file-upload">
-                <i class="bi bi-plus-lg"></i>
-                Добавить файл</label>
-              <input type="file" name="files" id="file-upload" class="file-upload" accept="image/*,video/*,audio/*" multiple required/>
-              <ul id="file-list" class="list-group"></ul>
-            </div>
-        <button type="submit" class="btn-lk">Отправить</button>
-      </form>
+          </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="dateViolation">Дата и время происшествия</label>
+            <input th:value="${#dates.format(localApplication.dateViolation, 'dd.MM.yyyy HH:mm')}" class="form-control" name="dateViolation" readonly>
+          </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="district">Район</label>
+            <input th:value="*{district.districtName}" class="form-control" name="district" readonly>
+          </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="address">Приблизительный адрес</label>
+            <input th:value="*{address}" class="form-control" name="address" readonly>
+          </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="violation">Правонарушение</label>
+            <label name="violations" id="violations">
+              <label th:each="viol : ${violations}" class="form-control" th:text="${viol.article} + ' ' + ${viol.name}"></label>
+            </label>
+          </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="information">Описание</label>
+            <textarea th:text="*{information}" class="form-control" style="height: 113px !important;" rows="2" cols="20" wrap="hard" readonly></textarea>
+          </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="uploaded-files">Прикрепленные файлы</label>
+            <label th:each="file : ${files}">
+              <a th:href="@{'/application/download/' + ${file}}" th:text="${file}"></a>
+            </label>
+          </div>
+          <div class="form-group" style="margin: 0 auto;">
+            <label for="commentary">Комментарий модератора</label>
+            <textarea th:text="*{commentary}" class="form-control" style="height: 113px !important;" rows="2" cols="20" wrap="hard" readonly></textarea>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -152,6 +154,7 @@
 
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Разделы сайта</h4>
+          
           <ul>
             <li><a href="index.html#hero" th:href="@{/#hero}">Главная</a></li>
             <li><a href="index.html#about" th:href="@{/#about}">О портале</a></li>
@@ -181,89 +184,6 @@
   <script src="../static/vendor/purecounter/purecounter_vanilla.js" th:src="@{vendor/purecounter/purecounter_vanilla.js}"></script>
 
   <!-- Main JS File -->
-
-  <script>
-    document.querySelector('select[multiple]').addEventListener('mousedown', (e) => {
-      if (e.target.tagName === 'OPTION') {
-        e.preventDefault(); // Отменяем действие по умолчанию
-        const option = e.target;
-        option.selected = !option.selected; // Инвертируем выбранный элемент
-        e.target.parentNode.dispatchEvent(new Event('change')); // Генерируем событие изменения
-      }
-    });
-    
-    window.addEventListener('change', () => {
-        const violationSelect = document.getElementById('violations');
-        const selectedOptions = Array.from(document.getElementById('violation').selectedOptions).map(option => option.value);
-        console.log('Выбранные правонарушения:', selectedOptions);
-    });
-
-    window.addEventListener('load', () => {
-      const datetime = new Date().toISOString().slice(0, -8);
-      document.getElementById('dateOfApplication').value = datetime;
-      document.getElementById('dateOfApplication').setAttribute('max', datetime);
-
-      const currentDate = new Date();
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      const lastMonthDate = currentDate.toISOString().slice(0, -8);
-
-      document.getElementById('dateOfApplication').setAttribute('min', lastMonthDate);
-    });
-
-    const fileListArray = []; // Массив для хранения загруженных файлов
-
-    document.getElementById('file-upload').addEventListener('change', function(event) {
-    const fileList = event.target.files;
-    const fileListElement = document.getElementById('file-list');
-
-    for (let i = 0; i < fileList.length; i++) {
-        const file = fileList[i];
-        fileListArray.push(file); // Добавляем файл в массив
-
-        const listItem = document.createElement('button');
-        listItem.className = 'list-group-item d-flex align-items-center';
-        listItem.type = 'button'
-
-        // Создаем элемент иконки
-        const icon = document.createElement('i');
-        icon.className = 'bi bi-file-earmark'; // Иконка файла
-        icon.style.marginRight = '10px'; // Отступ справа от иконки
-
-        // Создаем кнопку "Удалить"
-        const deleteButton = document.createElement('button');
-        Object.assign(deleteButton.style, {
-            marginRight: '10px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer'
-        });
-
-        deleteButton.type = 'button';
-        deleteButton.className = 'bi bi-trash';
-
-        deleteButton.onclick = (function(index) {
-            return function(event) {
-                event.stopPropagation(); // Останавливаем всплытие события
-                const fileIndex = fileListArray.indexOf(fileList[index]);
-                if (fileIndex > -1) {
-                    fileListArray.splice(fileIndex, 1); // Удаляем файл из массива
-                    fileListElement.removeChild(listItem); // Удаляем элемент списка
-                }
-            };
-        })(i);
-
-        listItem.onclick = function() {
-            console.log(file);
-        };
-
-        // Добавляем иконку и имя файла в элемент списка
-        listItem.appendChild(deleteButton);
-        listItem.appendChild(icon);
-        listItem.appendChild(document.createTextNode(file.name));
-        fileListElement.appendChild(listItem);
-    }
-});
-  </script>
   <script src="../static/js/main.js" th:src="@{js/main.js}"></script>
 
 </body>

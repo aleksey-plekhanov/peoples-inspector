@@ -215,13 +215,21 @@ h6 {
   margin-top: auto;
 }
 
+.form-group select[multiple] {
+  height: 150px;
+}
+
+.form-group option {
+  margin-bottom: 5px;
+}
+
 .container-input {
   border-radius: 24px;
   padding: 1.2rem;
   border: 1px solid white;
 }
 
-.violation-list {
+.application-list {
   scrollbar-width: thin;
   max-height: 1000px;
   overflow-y: auto;
@@ -229,7 +237,7 @@ h6 {
   margin-top: -10px;
 }
 
-.violation-item {
+.application-item {
   border: 1px solid #ccc;
   padding: 10px;
   width: 90%;

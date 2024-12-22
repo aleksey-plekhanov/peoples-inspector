@@ -34,7 +34,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" th:href="@{index.html}" class="logo d-flex align-items-center me-auto me-xl-0">
+      <a href="index.html" th:href="@{/}" class="logo d-flex align-items-center me-auto me-xl-0">
         <h1 class="sitename">Народный инспектор</h1>
       </a>
       <nav id="navmenu" class="navmenu">
@@ -390,7 +390,7 @@
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" th:href="@{index.html}" class="logo d-flex align-items-center">
+          <a href="index.html" th:href="@{/}" class="logo d-flex align-items-center">
             <span class="sitename">Народный инспектор</span>
           </a>
           <div class="footer-contact pt-3">
@@ -406,11 +406,11 @@
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Разделы сайта</h4>
           <ul>
-            <li><a href="index.html#hero" th:href="@{index.html#hero}">Главная</a></li>
-            <li><a href="index.html#about" th:href="@{index.html#about}">О портале</a></li>
+            <li><a href="#hero" th:href="@{#hero}">Главная</a></li>
+            <li><a href="#about" th:href="@{#about}">О портале</a></li>
             <li><a href="user.html" th:href="@{user}">Личный кабинет</a></li>
             <li><a href="applicationForUser.html" th:href="@{user/application}">Заявить о правонарушении</a></li>
-            <li><a href="index.html#faq" th:href="@{index.html#faq}">FAQ</a></li>
+            <li><a href="#faq" th:href="@{#faq}">FAQ</a></li>
           </ul>
         </div>
       </div>

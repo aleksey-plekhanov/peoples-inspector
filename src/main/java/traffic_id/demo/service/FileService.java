@@ -65,7 +65,7 @@ public class FileService {
             String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
             switch (extension)
             {
-                case "png", "jpeg", "jpg" -> extension = "Фото";
+                case "png", "jpeg", "jpg", "webp" -> extension = "Фото";
                 case "mp4", "m4v", "m4p", "wmv" -> extension = "Видео";
                 case "mp3", "aac", "wma", "aiff" -> extension = "Фото";
                 default -> {return false;}
@@ -114,9 +114,9 @@ public class FileService {
      * Извлекает все имена файлов из хранилища.
      * @return Список имен файлов
      */
-    public List<String> getAllFiles() {
+    public List<String> getAllFiles(String applicationFolder) {
         try {
-            return Files.walk(this.fileStorageLocation, 1)
+            return Files.walk(this.fileStorageLocation.resolve(applicationFolder), 1)
                     .filter(path -> !path.equals(this.fileStorageLocation))
                     .map(this.fileStorageLocation::relativize)
                     .map(Path::toString)

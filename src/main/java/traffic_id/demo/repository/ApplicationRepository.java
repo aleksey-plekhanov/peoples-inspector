@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 
 import traffic_id.demo.model.Application;
+import traffic_id.demo.model.User;
+import java.util.List;
+
 
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
 
@@ -17,4 +20,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     @Procedure("application_get_data")
     void getApplicationData(Integer id_app, String[] filePath, String[] violations);
+
+    List<Application> findByUser(User user);
 }

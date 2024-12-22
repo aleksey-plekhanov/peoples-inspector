@@ -1,5 +1,6 @@
 package traffic_id.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +11,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.util.StringUtils;
 
 import traffic_id.demo.model.Application;
 import traffic_id.demo.model.ApplicationViolation;
@@ -55,12 +55,10 @@ public class LocalApplicationService {
         // Для проверки пока оставлю присваивание
         String[] files = null, violations = null;
         applicationRepository.getApplicationData(application.getId(), files, violations);
-        // MulitpartFile f = new MultipartFile
-        // ApplicationDto applicationDto = new ApplicationDto(information, application.getTitle(), application.getDistrict().getDistrictName(),
-        // application.getAddress(), application.getStatus().getStatusName(), files, violations);
+        ApplicationDto applicationDto = new ApplicationDto(application.getInformation(), application.getTitle(), application.getDistrict().getDistrictName(),
+        application.getAddress(), application.getStatus().getStatusName(), violations);
 
-        //return applicationDto;
-        return new ApplicationDto();
+        return applicationDto;
     }
 
     // Отправка заявления в бд
@@ -105,6 +103,12 @@ public class LocalApplicationService {
         return violationRepository.findAll();
     }
 
+    public List<Application> getAllUserApplications() {
+        String userLogin = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        User user = userService.findUserByLogin(userLogin);
+        return applicationRepository.findByUser(user);
+    }
+
     public List<File> getAllApplicationDataByType(String type) {
         String rusType = "";
         switch (type)
@@ -116,8 +120,23 @@ public class LocalApplicationService {
         return fileRepository.findByTypeName(rusType);
     }
 
-    public List<ApplicationViolation> getAllApplicationViolation() {
+    public List<ApplicationViolation> getAllApplicationViolations() {
         return applicationViolationRepository.findAll();
+    }
+
+    public List<Violation> getApplicationViolations(Application application) {
+        List<ApplicationViolation> applicationViolations = applicationViolationRepository.findByApplication(application);
+        List<Violation> violations = new ArrayList<>();
+        for (ApplicationViolation applicationViolation : applicationViolations)
+        {
+            Violation violation = violationRepository.findByArticle(applicationViolation.getViolation().getArticle());
+            violations.add(violation);
+        }
+        return violations;
+    }
+
+    public List<String> getApplicationFiles(Application application) {
+        return fileService.getAllFiles(application.getId().toString());
     }
 
     public Boolean isUserOwnApplication(Application application)
@@ -127,8 +146,8 @@ public class LocalApplicationService {
         return (application.getUser() == user);
     }
 
-    public ResponseEntity<Resource> downloadFile(MultipartFile file, ApplicationDto applicationDto) {
-        Resource resource = fileService.loadFile(file.getOriginalFilename(), applicationDto.getApplicationId().toString());
+    public ResponseEntity<Resource> downloadFile(String file, Integer applicationId) {
+        Resource resource = fileService.loadFile(file, applicationId.toString());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
