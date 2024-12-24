@@ -1,0 +1,70 @@
+class AdminController {
+    - userService: UserService
+
+    + List<User> userList()
+    + String getUser(Integer userId, Model model)
+    + List<Moderator> moderatorList()
+    + ResponseEntity<String> addModerator(Integer userId)
+    + ResponseEntity<String> removeModerator(Integer moderatorId)
+    + String getModerator(Integer moderatorId, Model model)
+}
+
+class AuthController {
+    - userService: UserService
+
+    + String login(Model model)
+    + String userForm(Model model)
+    + String userSubmit(UserDto userDto, BindingResult resultUserDto, PasswordDto passwordDto, BindingResult resultPasswordDto, Model model)
+}
+
+class DistrictController {
+    - repository: DistrictRepository
+    + List<District> getAll()
+}
+
+class ExportReportController {
+    - excelReportService: ExcelReportService
+    + void generateExcelReport(HttpServletResponse response) 
+}
+
+class LocalAppliactionController {
+    - localApplicationService: LocalApplicationService
+    - unsendApplication: ApplicationDto
+
+    + String getAllUncheckedApplications(Model model)
+    + String getUncheckedApplication(Integer applicationId, Model model)
+    + String sendCheckedApplication(Application localApplication, BindingResult result, String status, Model model)
+    + List<File> getAllApplicationDataAudio(@PathVariable String type)
+    + List<ApplicationViolation> getAllApplicationViolation()
+    + String createApplication(Model model)
+    + String sendApplicationForUser(ApplicationDto applicationDto, MultipartFile[] files, BindingResult result, Model model)
+    + String getApplicationForUser(Integer applicationId, ApplicationDto applicationDto, Model model)
+    + ResponseEntity<Resource> downloadFile(Integer applicationId, String file)
+}
+
+class ModeratorController {
+    - userService: UserService
+
+    + String userList(Model model)
+    + String getUser(Integer userId, Model model)
+}
+
+class StatusController {
+    - repository: StatusRepository
+    + List<Status> getAll()
+}
+
+class UserController {
+    - userService: UserService
+
+    + String getUserAccount(Model model)
+    + String editUserAccount(MultipartFile file, UserDto userDto, BindingResult result, Model model)
+}
+
+class ViolationController {
+    - repViolation: ViolationRepository
+    - repViolationType: ViolationTypeRepository
+
+    + List<ViolationType> getAllViolationType()
+    + List<Violation> getAllViolation()
+}

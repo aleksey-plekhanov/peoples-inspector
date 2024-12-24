@@ -1,0 +1,257 @@
+class Application {
+    # applicationId: Integer
+    user: User
+    title: String
+    information: String
+    dateArrive: Date
+    dateViolation: Date
+    district: District
+    address: String
+    status: Status
+    moderator: Moderator
+    commentary: String
+    dateCheck: Date
+}
+
+class ApplicationViolation {
+    # ApplicationViolationId: Integer
+    application: Application
+    violation: dateViolation
+}
+
+class District {
+    # districtName: String
+}
+
+class File {
+    # fileId: Integer
+    application: Application
+    path: String
+    type: FileType
+}
+
+class FileType {
+    # typeName: String
+}
+
+class Moderator {
+    # moderatorId: Integer
+    user: User
+    beginPost: Date
+    endPost: Date
+}
+
+class Status {
+    # statusName: String
+}
+
+class User {
+    # id: Integer
+    surname: String
+    name: String
+    patronymic: String
+    data: UserDate
+    registration: Date
+}
+
+class UserData {
+    # userDataId: Integer
+    login: String
+    password: String
+    email: String
+    avatar: String
+    passwordConfim: String
+    roles: String
+    user: User
+}
+
+class Violation {
+    # arcticle: String
+    name: String
+    type: ViolationType
+    punishment: String
+}
+
+class ViolationType {
+    # typeName: String
+}
+
+class AdminController {
+    - userService: UserService
+
+    + List<User> userList()
+    + String getUser(Integer userId, Model model)
+    + List<Moderator> moderatorList()
+    + ResponseEntity<String> addModerator(Integer userId)
+    + ResponseEntity<String> removeModerator(Integer moderatorId)
+    + String getModerator(Integer moderatorId, Model model)
+}
+
+class AuthController {
+    - userService: UserService
+
+    + String login(Model model)
+    + String userForm(Model model)
+    + String userSubmit(UserDto userDto, BindingResult resultUserDto, PasswordDto passwordDto, BindingResult resultPasswordDto, Model model)
+}
+
+class DistrictController {
+    - repository: DistrictRepository
+    + List<District> getAll()
+}
+
+class ExportReportController {
+    - excelReportService: ExcelReportService
+    + void generateExcelReport(HttpServletResponse response) 
+}
+
+class LocalAppliactionController {
+    - localApplicationService: LocalApplicationService
+    - unsendApplication: ApplicationDto
+
+    + String getAllUncheckedApplications(Model model)
+    + String getUncheckedApplication(Integer applicationId, Model model)
+    + String sendCheckedApplication(Application localApplication, BindingResult result, String status, Model model)
+    + List<File> getAllApplicationDataAudio(@PathVariable String type)
+    + List<ApplicationViolation> getAllApplicationViolation()
+    + String createApplication(Model model)
+    + String sendApplicationForUser(ApplicationDto applicationDto, MultipartFile[] files, BindingResult result, Model model)
+    + String getApplicationForUser(Integer applicationId, ApplicationDto applicationDto, Model model)
+    + ResponseEntity<Resource> downloadFile(Integer applicationId, String file)
+}
+
+class ModeratorController {
+    - userService: UserService
+
+    + String userList(Model model)
+    + String getUser(Integer userId, Model model)
+}
+
+class StatusController {
+    - repository: StatusRepository
+    + List<Status> getAll()
+}
+
+class UserController {
+    - userService: UserService
+
+    + String getUserAccount(Model model)
+    + String editUserAccount(MultipartFile file, UserDto userDto, BindingResult result, Model model)
+}
+
+class ViolationController {
+    - repViolation: ViolationRepository
+    - repViolationType: ViolationTypeRepository
+
+    + List<ViolationType> getAllViolationType()
+    + List<Violation> getAllViolation()
+}
+
+class UserDto {
+    surname: String
+    name: String
+    patronymic: String
+    email: String
+    login: String
+    avatar: String
+}
+
+class ExcelReportService {
+    - applicationRepository: ApplicationRepository
+    + void generateExcelReport(HttpServletResponse response)
+}
+
+class ApplicationDto {
+    applicationId: Integer
+    user: User
+    title: String
+    information: String
+    address: String
+    dateArrive: Date
+    commentary: String
+    status: String
+    violations: List<String> 
+}
+
+class CustomAuthenticationProvider {
+    userDataRepository: UserDataRepository
+    bCryptPasswordEncoder: BCryptPasswordEncoder
+
+    + Authentication authenticate(final Authentication authentication)
+    + boolean supports(Class<?> authentication)
+    - List<GrantedAuthority> getAuthorities (String roles)
+}
+
+class FileService {
+    - applicationFileStorageLocation: Path
+    - avatarFileStorageLocation: Path
+    - fileRepository: FileRepository
+
+    + String saveAvatarFile(MultipartFile file, String folder)
+    + void saveApplicationFiles(MultipartFile[] files, String folder)
+    + Boolean saveApplicationFilesIntoDB(MultipartFile[] files, Integer idData)
+    + Resource loadFile(String fileName, String folder)
+    + MultipartFile[] convertStringsToMultipartFiles(String[] paths)
+    + List<String> getAllFiles(String applicationFolder)
+}
+
+class LocalApplicationService {
+    - applicationRepository: ApplicationRepository 
+    - fileRepository: FileRepository
+    - applicationViolationRepository: ApplicationViolationRepository
+    - districtRepository: DistrictRepository
+    - violationRepository: ViolationRepository
+    - userService: UserService
+    - fileService: FileService
+
+    + ApplicationDto getApplicationDto(Application application)
+    + void sendApplicationDto(ApplicationDto applicationDto, MultipartFile[] files, String status)
+    + void sendCheckedApplication(Application application, String status) 
+    + List<Application> getAllApplications()
+    + List<Application> getAllUncheckedApplications()
+    + Application findApplicationById(Integer applicationId)
+    + List<District> getAllDistricts()
+    + List<Violation> getAllViolations()
+    + List<Application> getAllUserApplications()
+    + List<ApplicationViolation> getAllApplicationViolations()
+    + List<Violation> getApplicationViolations(Application application)
+    + List<String> getApplicationFiles(Application application)
+    + Boolean isUserOwnApplication(Application application)
+    + Boolean isModeratorHasRole()
+    + ResponseEntity<Resource> downloadFile(String file, Integer applicationId)
+}
+
+class MyUserDetailsService {
+    - userDataRepository: UserDataRepository
+
+    - List<GrantedAuthority> getAuthorities (String roles)
+    + UserDetails loadUserByUsername(String login)
+}
+
+class PasswordDto {
+    password: String
+    matchingPassword: String
+}
+
+class UserService {
+    - userRepository: UserRepository 
+    - userDataRepository: UserDataRepository
+    - moderatorRepository: ModeratorRepository
+    - bCryptPasswordEncoder: BCryptPasswordEncoder
+    - fileService: FileService
+
+    + User registerNewUserAccount(UserDto userDto, PasswordDto passwordDto)
+    + User editUserAccount(UserDto userDto, MultipartFile file)
+    + boolean emailExists(String email)
+    + boolean loginExists(String login)
+    + User findUserById(Integer userId)
+    + User findUserByLogin(String login)
+    + List<User> allUsers()
+    + User getUser()
+    + Boolean isModeratorHasRole()
+    + Moderator findModeratorById(Integer moderatorId)
+    + Moderator findModeratorByUser(User user)
+    + List<Moderator> allModerators()
+    + boolean addModerator(Integer userId)
+    + boolean removeModerator(Integer moderatorId)
+}
