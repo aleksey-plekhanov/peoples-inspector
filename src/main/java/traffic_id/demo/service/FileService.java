@@ -22,15 +22,17 @@ import traffic_id.demo.repository.FileRepository;
 @Service
 public class FileService {
 
-    private final Path fileStorageLocation;
+    private final Path applicationFileStorageLocation;
+    private final Path avatarFileStorageLocation;
 
     @Autowired
     private FileRepository fileRepository;
 
     public FileService() {
-        this.fileStorageLocation = Paths.get("Applications").toAbsolutePath().normalize();
+        this.applicationFileStorageLocation = Paths.get("Applications").toAbsolutePath().normalize();
+        this.avatarFileStorageLocation = Paths.get("Avatars").toAbsolutePath().normalize();
         try {
-            Files.createDirectories(this.fileStorageLocation);
+            Files.createDirectories(this.applicationFileStorageLocation);
         } catch (IOException ex) {
             throw new RuntimeException("Не удалось создать каталог, в котором будут храниться загруженные файлы.", ex);
         }
@@ -38,15 +40,33 @@ public class FileService {
 
     /**
      * Сохраняет загруженный файл в указанном месте.
-     * @param files Многостраничные файлы, которые нужно сохранить
-     * @param applicationFolder ID папки заявления
+     * @param file Многостраничные файлы, которые нужно сохранить
+     * @param folder ID данных пользователя
+     * @return путь к загруженному файлу
      */
-    public void saveFiles(MultipartFile[] files, String applicationFolder) {
+    public String saveAvatarFile(MultipartFile file, String folder) {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        try {
+            Path targetLocation = this.applicationFileStorageLocation.resolve(folder);
+            Files.createDirectories(targetLocation);
+            Files.copy(file.getInputStream(), targetLocation.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+            return targetLocation.resolve(fileName).toString();
+            } catch (IOException ex) {
+                throw new RuntimeException("Не удалось сохранить файл " + fileName + ". Пожалуйста, попробуйте снова!", ex);
+            }
+    }
+
+    /**
+     * Сохраняет загруженный файл в указанном месте.
+     * @param files Многостраничные файлы, которые нужно сохранить
+     * @param folder ID заявления
+     */
+    public void saveApplicationFiles(MultipartFile[] files, String folder) {
         for (MultipartFile file : files)
         {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             try {
-                Path targetLocation = this.fileStorageLocation.resolve(applicationFolder);
+                Path targetLocation = this.applicationFileStorageLocation.resolve(folder);
                 Files.createDirectories(targetLocation);
                 Files.copy(file.getInputStream(), targetLocation.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException ex) {
@@ -59,7 +79,7 @@ public class FileService {
      * Добавляет файлы в БД.
      * @param file Многостраничный файл, который нужно сохранить
      */
-    public Boolean saveFilesIntoDB(MultipartFile[] files, Integer idData) {
+    public Boolean saveApplicationFilesIntoDB(MultipartFile[] files, Integer idData) {
         for (MultipartFile file : files)
         {
             String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
@@ -71,7 +91,7 @@ public class FileService {
                 default -> {return false;}
             }
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            Path path = this.fileStorageLocation.resolve(idData.toString()).resolve(fileName);
+            Path path = this.applicationFileStorageLocation.resolve(idData.toString()).resolve(fileName);
             fileRepository.addFile(idData, path.toString(), extension);
         }
         return true;
@@ -82,9 +102,9 @@ public class FileService {
      * @param fileName имя загружаемого файла
      * @return Ресурс, представляющий файл
      */
-    public Resource loadFile(String fileName, String applicationFolder) {
+    public Resource loadFile(String fileName, String folder) {
         try {
-            Path filePath = this.fileStorageLocation.resolve(applicationFolder).resolve(fileName).normalize();
+            Path filePath = this.applicationFileStorageLocation.resolve(folder).resolve(fileName).normalize();
             
             Resource resource = new UrlResource(filePath.toUri());
             if (!resource.exists())
@@ -116,9 +136,9 @@ public class FileService {
      */
     public List<String> getAllFiles(String applicationFolder) {
         try {
-            return Files.walk(this.fileStorageLocation.resolve(applicationFolder), 1)
-                    .filter(path -> !path.equals(this.fileStorageLocation))
-                    .map(this.fileStorageLocation::relativize)
+            return Files.walk(this.applicationFileStorageLocation.resolve(applicationFolder), 1)
+                    .filter(Files::isRegularFile)
+                    .map(this.applicationFileStorageLocation::relativize)
                     .map(Path::toString)
                     .collect(Collectors.toList());
         } catch (IOException ex) {

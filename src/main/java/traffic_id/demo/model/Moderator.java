@@ -25,17 +25,17 @@ public class Moderator {
     @JoinColumn(name = "Пользователь", nullable = false, unique=false)
     private User user;
 
-    @Column(name = "Дата начала должности", nullable = true, columnDefinition="date")
-    private Date begin_post;
+    @Column(name = "Дата начала должности", nullable = false, columnDefinition="date")
+    private Date beginPost;
 
-    @Column(name = "Дата окончания должности", nullable = false, columnDefinition="date")
-    private Date end_post;
+    @Column(name = "Дата окончания должности", nullable = true, columnDefinition="date")
+    private Date endPost;
 
-    public Moderator(Integer id_moderator, User user, Date begin_post, Date end_post) {
+    public Moderator(Integer moderatorId, User user, Date beginPost, Date endPost) {
         this.moderatorId = moderatorId;
         this.user = user;
-        this.begin_post = begin_post;
-        this.end_post = end_post;
+        this.beginPost = beginPost;
+        this.endPost = endPost;
     }
 
     public Moderator() {
@@ -57,26 +57,26 @@ public class Moderator {
         this.user = user;
     }
 
-    public Date getBegin_post() {
-        return begin_post;
+    public Date getBeginPost() {
+        return beginPost;
     }
 
-    public void setBegin_post(Date begin_post) {
-        this.begin_post = begin_post;
+    public void setBeginPost(Date beginPost) {
+        this.beginPost = beginPost;
     }
 
-    public Date getEnd_post() {
-        return end_post;
+    public Date getEndPost() {
+        return endPost;
     }
 
-    public void setEnd_post(Date end_post) {
-        this.end_post = end_post;
+    public void setEndPost(Date endPost) {
+        this.endPost = endPost;
     }
 
     @Override
     public String toString() {
-        return "Moderator [moderatorId=" + moderatorId + ", user=" + user + ", begin_post=" + begin_post
-                + ", end_post=" + end_post + "]";
+        return "Moderator [moderatorId=" + moderatorId + ", user=" + user + ", beginPost=" + beginPost
+                + ", endPost=" + endPost + "]";
     }
     
 }

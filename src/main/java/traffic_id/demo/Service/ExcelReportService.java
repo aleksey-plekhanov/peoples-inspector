@@ -51,8 +51,8 @@ public class ExcelReportService {
 
             row.createCell(0).setCellValue(application.getTitle());
             row.createCell(1).setCellValue(application.getInformation());
-            row.createCell(2).setCellValue(application.getDateArrive());
-            row.createCell(3).setCellValue(application.getDateViolation());
+            row.createCell(2).setCellValue(application.getDateArrive().toString());
+            row.createCell(3).setCellValue(application.getDateViolation().toString());
             row.createCell(4).setCellValue(application.getDistrict().getDistrictName());
             row.createCell(5).setCellValue(application.getAddress());
             row.createCell(6).setCellValue(application.getStatus().getStatusName());

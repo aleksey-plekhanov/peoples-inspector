@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -64,30 +63,32 @@ public class LocalApplicationService {
     // Отправка заявления в бд
     public void sendApplicationDto(ApplicationDto applicationDto, MultipartFile[] files, String status)
     {
-        String userLogin = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = userService.findUserByLogin(userLogin);
+        User user = userService.getUser();
         
         // TO DO: обработка исключений
         Integer applicationID = applicationRepository.createApplication(user.getId(), applicationDto.getTitle(), 
                                             applicationDto.getInformation(), applicationDto.getDateViolation(), 
                                             applicationDto.getDistrict(), applicationDto.getAddress(), status);
 
-        fileService.saveFiles(files, applicationID.toString());
-        fileService.saveFilesIntoDB(files, applicationID);  
+        fileService.saveApplicationFiles(files, applicationID.toString());
+        fileService.saveApplicationFilesIntoDB(files, applicationID);  
         String[] violations = applicationDto.getViolations().toArray(new String[0]);
         applicationViolationRepository.addViolations(applicationID, violations);
     }
 
-    public void sendApplicationByModerator(ApplicationDto applicationDto) {
-        String userLogin = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        Moderator moderator = userService.findModeratorByUser(userService.findUserByLogin(userLogin));
-        
-        applicationRepository.moderateApplication(applicationDto.getApplicationId(), moderator.getId(), 
-        applicationDto.getCommentary(), applicationDto.getStatus());
+    public void sendCheckedApplication(Application application, String status) {
+        Moderator moderator = userService.findModeratorByUser(userService.getUser());
+
+        applicationRepository.moderateApplication(application.getId(), moderator.getId(), 
+        application.getCommentary(), status);
     }
 
-    public List<Application> allApplications() {
+    public List<Application> getAllApplications() {
         return applicationRepository.findAll();
+    }
+
+    public List<Application> getAllUncheckedApplications() {
+        return applicationRepository.findUncheckedApplications(userService.getUser().getId());
     }
 
     public Application findApplicationById(Integer applicationId) {
@@ -104,9 +105,7 @@ public class LocalApplicationService {
     }
 
     public List<Application> getAllUserApplications() {
-        String userLogin = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = userService.findUserByLogin(userLogin);
-        return applicationRepository.findByUser(user);
+        return applicationRepository.findByUser(userService.getUser());
     }
 
     public List<File> getAllApplicationDataByType(String type) {
@@ -139,11 +138,12 @@ public class LocalApplicationService {
         return fileService.getAllFiles(application.getId().toString());
     }
 
-    public Boolean isUserOwnApplication(Application application)
-    {
-        String userLogin = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = userService.findUserByLogin(userLogin);
-        return (application.getUser() == user);
+    public Boolean isUserOwnApplication(Application application) {
+        return (application.getUser() == userService.getUser());
+    }
+
+    public Boolean isModeratorHasRole() {
+        return userService.isModeratorHasRole();
     }
 
     public ResponseEntity<Resource> downloadFile(String file, Integer applicationId) {

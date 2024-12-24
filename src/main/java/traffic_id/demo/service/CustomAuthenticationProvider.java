@@ -2,6 +2,7 @@ package traffic_id.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,13 +37,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Неверный логин или пароль"); 
         } 
 
-        List<GrantedAuthority> grantedAuths = new ArrayList<>();
-        grantedAuths.add(new SimpleGrantedAuthority(userData.getRoles()));
-        return new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
+        return new UsernamePasswordAuthenticationToken(name, password, getAuthorities(userData.getRoles()));
     }
     
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
+
+    private static List<GrantedAuthority> getAuthorities (String roles) {
+        String[] rolesMas = roles.split(",");
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String role : rolesMas) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
+        return authorities;
     }
 }

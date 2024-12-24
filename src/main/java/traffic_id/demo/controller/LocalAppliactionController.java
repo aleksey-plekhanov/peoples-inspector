@@ -1,15 +1,14 @@
 package traffic_id.demo.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,34 +33,55 @@ public class LocalAppliactionController {
     private ApplicationDto unsendApplication = null;
 
     @GetMapping("/moderator/application")
-    public List<Application> getAllApplication() {
-        return localApplicationService.allApplications();
+    public String getAllUncheckedApplications(Model model) {
+        if (!localApplicationService.isModeratorHasRole())
+            return "redirect:/logout";
+        List<Application> apps = localApplicationService.getAllUncheckedApplications();
+        if (apps.size() != 0) {
+            model.addAttribute("localApplication", apps.get(0));
+            model.addAttribute("applications", apps);
+            model.addAttribute("violations", localApplicationService.getApplicationViolations(apps.get(0)));
+            model.addAttribute("files", localApplicationService.getApplicationFiles(apps.get(0)));
+        }
+        else {
+            model.addAttribute("localApplication", new Application());
+            model.addAttribute("applications", new ArrayList<Application>());
+        }
+        return "applicationForModerator";
     }
 
     @GetMapping("/moderator/application/{applicationId}")
-    public String getApplicationByModerator(@PathVariable Integer applicationId, Model model) {
+    public String getUncheckedApplication(@PathVariable Integer applicationId, Model model) {
+        if (!localApplicationService.isModeratorHasRole())
+            return "redirect:/logout";
         Application application = localApplicationService.findApplicationById(applicationId);
-        if (application == null)
-            //TO DO: переделать return в bad gateway
-            return "applicationByModerator";
-    
-        model.addAttribute("applicationDto", localApplicationService.getApplicationDto(application));
-        return "applicationByModerator";
+        model.addAttribute("localApplication", application);
+        model.addAttribute("applications", localApplicationService.getAllUncheckedApplications());
+        model.addAttribute("violations", localApplicationService.getApplicationViolations(application));
+        model.addAttribute("files", localApplicationService.getApplicationFiles(application));
+        return "applicationForModerator";
     }
 
-    @PostMapping("/moderator/application/send")
-    public String sendApplicationByModerator(@ModelAttribute ApplicationDto applicationDto, BindingResult result, Model model) {
-        localApplicationService.sendApplicationByModerator(applicationDto);
-        return "applicationByModerator";
+    @PostMapping("/moderator/application/send/{status}")
+    public String sendCheckedApplication(@ModelAttribute Application localApplication, BindingResult result,
+    @PathVariable String status,  Model model) {
+        if (!localApplicationService.isModeratorHasRole())
+            return "redirect:/logout";
+        localApplicationService.sendCheckedApplication(localApplication, status);
+        return "redirect:/moderator/application";
     }
 
     @GetMapping("/moderator/application/data/{type}")
     public List<File> getAllApplicationDataAudio(@PathVariable String type) {
+        if (!localApplicationService.isModeratorHasRole())
+            return null;
         return localApplicationService.getAllApplicationDataByType(type);
     }
 
     @GetMapping("/moderator/application/data/violation")
     public List<ApplicationViolation> getAllApplicationViolation() {
+        if (!localApplicationService.isModeratorHasRole())
+            return null;
         return localApplicationService.getAllApplicationViolations();
     }
 
@@ -96,7 +116,7 @@ public class LocalAppliactionController {
         if (applicationDto != null)
             unsendApplication = applicationDto;
         
-            Application application = localApplicationService.findApplicationById(applicationId);
+        Application application = localApplicationService.findApplicationById(applicationId);
         if (application == null)
             //TO DO: переделать return в bad gateway
             return "applicationForUser";
@@ -115,8 +135,8 @@ public class LocalAppliactionController {
     /**
      * Загрузка файла из системы к пользователю
      */ 
-    @GetMapping("/application/download/{file}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String file, @ModelAttribute ApplicationDto applicationDto) {
-        return localApplicationService.downloadFile(file, applicationDto.getApplicationId());
+    @GetMapping("/application/download/{applicationId}/{file}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Integer applicationId, @PathVariable String file) {
+        return localApplicationService.downloadFile(file, applicationId);
     }
 }

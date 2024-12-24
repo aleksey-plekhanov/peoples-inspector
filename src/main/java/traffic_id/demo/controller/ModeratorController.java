@@ -23,12 +23,16 @@ public class ModeratorController {
 
     @GetMapping("/user/all")
     public String userList(Model model) {
+        if (!userService.isModeratorHasRole())
+            return "redirect:/logout";
         model.addAttribute("allUsers", userService.allUsers());
         return "user";
     }
 
     @GetMapping("/user/{userId}")
     public String getUser(@PathVariable Integer userId, Model model) {
+        if (!userService.isModeratorHasRole())
+            return "redirect:/logout";
         model.addAttribute("allUsers", userService.findUserById(userId));
         return "user";
     }

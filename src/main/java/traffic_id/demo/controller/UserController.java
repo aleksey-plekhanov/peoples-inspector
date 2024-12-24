@@ -1,7 +1,5 @@
 package traffic_id.demo.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import traffic_id.demo.exceptions.EmailAlreadyExistException;
 import traffic_id.demo.exceptions.LoginAlreadyExistException;
@@ -39,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String editUserAccount(@Validated @ModelAttribute UserDto userDto,
+    public String editUserAccount(@RequestParam MultipartFile file, @Validated @ModelAttribute UserDto userDto,
                             BindingResult result, Model model) {
         
         if (result.hasErrors()) {
@@ -48,7 +46,7 @@ public class UserController {
         }
 
         try {
-            userService.editUserAccount(userDto);
+            userService.editUserAccount(userDto, file);
         } catch (EmailAlreadyExistException eaex) {
             result.rejectValue("email", null, eaex.getLocalizedMessage());
         }

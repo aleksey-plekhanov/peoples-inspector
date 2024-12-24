@@ -1,64 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Регистрация | "Народный инспектор"</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../static/css/auth/auth.css', th:href="@{/css/auth/auth.css}">
+    <link rel='stylesheet' type='text/css' media='screen' href='../static/css/auth/auth.css' ,
+        th:href="@{/css/auth/auth.css}">
     <script src="../static/js/auth.js" th:src="@{/js/auth.js}"></script>
-</head> 
-    <body>
-        <div class="wrapper">
-            <form th:action="@{/registration/save}" th:object="${userDto}" method="POST" enctype="utf8">
-                <h1>Регистрация</h1>
+    <!-- Favicons -->
+    <link href="../static/img/favicon.png" rel="icon" th:href="@{/img/favicon.png}">
+    <link href="../static/img/apple-touch-icon.png" rel="apple-touch-icon" th:href="@{/img/apple-touch-icon.png}">
+</head>
 
-                <div class="input-box">
-                    <input th:field="*{surname}" type="text" placeholder="Фамилия" required>
-                    <err th:errors = "*{surname}" class="text-danger"
-                        th:if="${#fields.hasErrors('surname')}"></err>
-                </div>
+<body>
+    <div class="wrapper">
+        <form th:action="@{/registration/save}" th:object="${userDto}" method="POST" enctype="utf8">
+            <h1>Регистрация</h1>
 
-                <div class="input-box">
-                    <input th:field="*{name}" type="text" placeholder="Имя" required>
-                    <err th:errors = "*{name}" class="text-danger"
-                        th:if="${#fields.hasErrors('name')}"></err>
-                </div>
+            <div class="input-box">
+                <input th:field="*{surname}" type="text" placeholder="Фамилия" required>
+                <err th:errors="*{surname}" class="text-danger" th:if="${#fields.hasErrors('surname')}"></err>
+            </div>
 
-                <div class="input-box">
-                    <input th:field="*{patronymic}" type="text" placeholder="Отечество (при наличии)">
-                    <err th:errors = "*{patronymic}" class="text-danger"
-                        th:if="${#fields.hasErrors('patronymic')}"></err>
-                </div>
+            <div class="input-box">
+                <input th:field="*{name}" type="text" placeholder="Имя" required>
+                <err th:errors="*{name}" class="text-danger" th:if="${#fields.hasErrors('name')}"></err>
+            </div>
 
-                <div class="input-box">
-                    <input th:field="*{login}" type="text" placeholder="Логин" required>
-                    <err th:errors = "*{login}" class="text-danger"
-                        th:if="${#fields.hasErrors('login')}"></err>
-                </div>
+            <div class="input-box">
+                <input th:field="*{patronymic}" type="text" placeholder="Отечество (при наличии)">
+                <err th:errors="*{patronymic}" class="text-danger" th:if="${#fields.hasErrors('patronymic')}"></err>
+            </div>
 
-                <div class="input-box">
-                    <input th:field="*{email}" type="email" placeholder="Email" required>
-                    <err th:errors = "*{email}" class="text-danger"
-                        th:if="${#fields.hasErrors('email')}"></err>
-                </div>
+            <div class="input-box">
+                <input th:field="*{login}" type="text" placeholder="Логин" required>
+                <err th:errors="*{login}" class="text-danger" th:if="${#fields.hasErrors('login')}"></err>
+            </div>
 
-                <div class="input-box" th:object="${passwordDto}">
-                    <input th:field="*{password}" type="password" placeholder="Пароль" required>
-                </div>
+            <div class="input-box">
+                <input th:field="*{email}" type="email" placeholder="Email" required>
+                <err th:errors="*{email}" class="text-danger" th:if="${#fields.hasErrors('email')}"></err>
+            </div>
 
-                <div class="input-box" th:object="${passwordDto}">
-                    <input th:field="*{matchingPassword}" type="password" placeholder="Подтвердите пароль" required>
-                    <err th:errors = "*{password}" class="text-danger"
-                        th:if="${#fields.hasErrors('password')}"></err>
-                </div>
+            <div class="input-box" th:object="${passwordDto}">
+                <input th:field="*{password}" type="password" placeholder="Пароль" required>
+            </div>
 
-                <button type="submit" class="btn">Зарегистрироваться</button>
-                
-                <div class="register-link">
-                    <p>Зарегистрированы в системе? <a href="login.html" th:href="@{/login.html}">Войти</a></p>
-                </div>
-            </form>
-        </div>
-    </body>
+            <div class="input-box" th:object="${passwordDto}">
+                <input th:field="*{matchingPassword}" type="password" placeholder="Подтвердите пароль" required>
+                <err th:errors="*{password}" class="text-danger" th:if="${#fields.hasErrors('password')}"></err>
+            </div>
+
+            <button type="submit" class="btn">Зарегистрироваться</button>
+
+            <div class="register-link">
+                <p>Зарегистрированы в системе? <a href="login.html" th:href="@{/login.html}">Войти</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+
 </html>

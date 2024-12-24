@@ -48,10 +48,10 @@ public class AuthController {
     }
 
     @PostMapping("/registration/save")
-    public String userSubmit(@Validated @ModelAttribute UserDto userDto, @Validated @ModelAttribute PasswordDto passwordDto,
-                            BindingResult result, Model model) {
+    public String userSubmit(@Validated @ModelAttribute UserDto userDto, BindingResult resultUserDto, 
+                            @Validated @ModelAttribute PasswordDto passwordDto, BindingResult resultPasswordDto, Model model) {
 
-        if (result.hasErrors()) {
+        if (resultUserDto.hasErrors() || resultPasswordDto.hasErrors()) {
             model.addAttribute("userDto", userDto);
             model.addAttribute("passwordDto", passwordDto);
             return "registration";
@@ -60,16 +60,16 @@ public class AuthController {
         try {
             userService.registerNewUserAccount(userDto, passwordDto);
         } catch (EmailAlreadyExistException eaex) {
-            result.rejectValue("email", null, eaex.getLocalizedMessage());
+            resultUserDto.rejectValue("email", null, eaex.getLocalizedMessage());
         }
         catch (LoginAlreadyExistException | UserNotFoundException laex) {
-            result.rejectValue("login", null, laex.getLocalizedMessage());
+            resultUserDto.rejectValue("login", null, laex.getLocalizedMessage());
         }
         catch (PasswordIncorrectException piex) {
-            result.rejectValue("password", null, piex.getLocalizedMessage());
+            resultPasswordDto.rejectValue("password", null, piex.getLocalizedMessage());
         }
 
-        if (result.hasErrors()) {
+        if (resultUserDto.hasErrors() || resultPasswordDto.hasErrors()) {
             model.addAttribute("userDto", userDto);
             model.addAttribute("passwordDto", passwordDto);
             return "registration";
@@ -77,19 +77,4 @@ public class AuthController {
         
         return "redirect:/login";
     }
-
-    // @GetMapping()
-    // public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid UserDto userDto,
-    //                                         HttpServletRequest request, Errors errors) {
-    
-    //     try {
-    //         userService.registerNewUserAccount(userDto);
-    //     } catch (EmailAlreadyExistException | LoginAlreadyExistException | UserNotFound ex) {
-    //         ModelAndView mav = new ModelAndView();
-    //         mav.addObject("message", ex.toString());
-    //         return mav;
-    //     }
-        
-    //     return new ModelAndView("registration", "user", userDto);
-    // }
 }

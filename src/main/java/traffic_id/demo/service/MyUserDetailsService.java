@@ -32,18 +32,18 @@ public class MyUserDetailsService implements UserDetailsService {
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
-        
+
         return new org.springframework.security.core.userdetails.User(
           user.getLogin(), user.getPassword(), enabled, accountNonExpired,
           credentialsNonExpired, accountNonLocked, getAuthorities(user.getRoles()));
     }
 
     private static List<GrantedAuthority> getAuthorities (String roles) {
+        String[] rolesMas = roles.split(",");
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(roles));
-        // for (String role : roles) {
-        //     authorities.add(new SimpleGrantedAuthority(roles));
-        // }
+        for (String role : rolesMas) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
         return authorities;
     }
 }
