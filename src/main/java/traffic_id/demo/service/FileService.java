@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +40,10 @@ public class FileService {
         }
     }
 
+    public Path getApplicationFileStorageLocation() {
+        return applicationFileStorageLocation;
+    }
+
     /**
      * Сохраняет загруженный файл в указанном месте.
      * @param file Многостраничные файлы, которые нужно сохранить
@@ -47,13 +53,32 @@ public class FileService {
     public String saveAvatarFile(MultipartFile file, String folder) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
-            Path targetLocation = this.applicationFileStorageLocation.resolve(folder);
+            Path targetLocation = this.avatarFileStorageLocation.resolve(folder);
             Files.createDirectories(targetLocation);
             Files.copy(file.getInputStream(), targetLocation.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
             return targetLocation.resolve(fileName).toString();
             } catch (IOException ex) {
                 throw new RuntimeException("Не удалось сохранить файл " + fileName + ". Пожалуйста, попробуйте снова!", ex);
             }
+    }
+
+    /**
+     * Загружает файл в качестве ресурса для скачивания.
+     * @param fileName имя загружаемого файла
+     * @return Ресурс, представляющий файл
+     */
+    public Resource loadAvatarFile(String fileName, String folder) {
+        try {
+            Path filePath = this.avatarFileStorageLocation.resolve(folder).resolve(fileName).normalize();
+            
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists())
+                throw new RuntimeException("Файл не найден " + fileName);
+            
+            return resource;
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException("Файл не найден " + fileName, ex);
+        }
     }
 
     /**
@@ -102,7 +127,7 @@ public class FileService {
      * @param fileName имя загружаемого файла
      * @return Ресурс, представляющий файл
      */
-    public Resource loadFile(String fileName, String folder) {
+    public Resource loadApplicationFile(String fileName, String folder) {
         try {
             Path filePath = this.applicationFileStorageLocation.resolve(folder).resolve(fileName).normalize();
             
@@ -117,20 +142,6 @@ public class FileService {
     }
 
     /**
-     * Конвертирует путь в MultipartFile.
-     * @return MultipartFile
-     */
-    public MultipartFile[] convertStringsToMultipartFiles(String[] paths) {
-        MultipartFile[] files = new MultipartFile[paths.length];
-        for (int i = 0; i < paths.length; i++)
-        {
-            File file = new File(paths[i]);
-            //files[i] = new CommonsMultipartFile(file);
-        }
-        return files;
-    }
-
-    /**
      * Извлекает все имена файлов из хранилища.
      * @return Список имен файлов
      */
@@ -142,7 +153,19 @@ public class FileService {
                     .map(Path::toString)
                     .collect(Collectors.toList());
         } catch (IOException ex) {
-            throw new RuntimeException("Не удалось вывести список файлов!", ex);
+            return null;
         }
+    }
+
+    public ResponseEntity<Resource> downloadFile(String file, Integer folder) {
+        Resource resource = loadApplicationFile(file, folder.toString());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    public String getFileName(String path) {
+        File file = new File(path);
+        return StringUtils.cleanPath(file.getName());
     }
 }

@@ -10,7 +10,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import traffic_id.demo.controller.LocalAppliactionController;
+import traffic_id.demo.controller.UserController;
 import traffic_id.demo.model.Application;
 import traffic_id.demo.model.ApplicationViolation;
 import traffic_id.demo.model.File;
@@ -76,11 +79,11 @@ public class LocalApplicationService {
         applicationViolationRepository.addViolations(applicationID, violations);
     }
 
-    public void sendCheckedApplication(Application application, String status) {
+    public void sendCheckedApplication(ApplicationDto applicationDto, String status) {
         Moderator moderator = userService.findModeratorByUser(userService.getUser());
 
-        applicationRepository.moderateApplication(application.getId(), moderator.getId(), 
-        application.getCommentary(), status);
+        applicationRepository.moderateApplication(applicationDto.getId(), moderator.getId(), 
+        applicationDto.getCommentary(), status);
     }
 
     public List<Application> getAllApplications() {
@@ -138,6 +141,14 @@ public class LocalApplicationService {
         return fileService.getAllFiles(application.getId().toString());
     }
 
+    public List<String> getApplicationFilesFullPath(Application application) {
+        return fileRepository.findByApplication(application.getId());
+    }
+
+    public String getApplicationFileStorageLocation() {
+        return fileService.getApplicationFileStorageLocation().toString();
+    }
+
     public Boolean isUserOwnApplication(Application application) {
         return (application.getUser() == userService.getUser());
     }
@@ -147,9 +158,6 @@ public class LocalApplicationService {
     }
 
     public ResponseEntity<Resource> downloadFile(String file, Integer applicationId) {
-        Resource resource = fileService.loadFile(file, applicationId.toString());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
-    }
+        return fileService.downloadFile(file, applicationId);
+    
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +19,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 
+import jakarta.mail.MessagingException;
 import traffic_id.demo.model.Application;
 import traffic_id.demo.model.ApplicationViolation;
 import traffic_id.demo.model.File;
 import traffic_id.demo.service.ApplicationDto;
+import traffic_id.demo.service.DefaultEmailService;
 import traffic_id.demo.service.LocalApplicationService;
 
 @Controller
@@ -30,6 +33,9 @@ public class LocalAppliactionController {
     @Autowired
     private LocalApplicationService localApplicationService;
 
+    @Autowired
+    private DefaultEmailService defaultEmailService;
+
     private ApplicationDto unsendApplication = null;
 
     @GetMapping("/moderator/application")
@@ -37,8 +43,8 @@ public class LocalAppliactionController {
         if (!localApplicationService.isModeratorHasRole())
             return "redirect:/logout";
         List<Application> apps = localApplicationService.getAllUncheckedApplications();
-        if (apps.size() != 0) {
-            model.addAttribute("localApplication", apps.get(0));
+        if (!apps.isEmpty()) {
+            model.addAttribute("localApplication", new ApplicationDto(apps.get(0)));
             model.addAttribute("applications", apps);
             model.addAttribute("violations", localApplicationService.getApplicationViolations(apps.get(0)));
             model.addAttribute("files", localApplicationService.getApplicationFiles(apps.get(0)));
@@ -55,7 +61,7 @@ public class LocalAppliactionController {
         if (!localApplicationService.isModeratorHasRole())
             return "redirect:/logout";
         Application application = localApplicationService.findApplicationById(applicationId);
-        model.addAttribute("localApplication", application);
+        model.addAttribute("localApplication", new ApplicationDto(application));
         model.addAttribute("applications", localApplicationService.getAllUncheckedApplications());
         model.addAttribute("violations", localApplicationService.getApplicationViolations(application));
         model.addAttribute("files", localApplicationService.getApplicationFiles(application));
@@ -63,11 +69,18 @@ public class LocalAppliactionController {
     }
 
     @PostMapping("/moderator/application/send/{status}")
-    public String sendCheckedApplication(@ModelAttribute Application localApplication, BindingResult result,
+    public String sendCheckedApplication(@ModelAttribute ApplicationDto localApplication, BindingResult result,
     @PathVariable String status,  Model model) {
         if (!localApplicationService.isModeratorHasRole())
             return "redirect:/logout";
         localApplicationService.sendCheckedApplication(localApplication, status);
+        if (status.equals("Одобрено")) {
+            try {
+                defaultEmailService.sendMail(localApplication);
+            } catch (MessagingException me) {
+                return me.getLocalizedMessage();
+            }
+        }
         return "redirect:/moderator/application";
     }
 
@@ -138,5 +151,13 @@ public class LocalAppliactionController {
     @GetMapping("/application/download/{applicationId}/{file}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Integer applicationId, @PathVariable String file) {
         return localApplicationService.downloadFile(file, applicationId);
+    }
+
+    @GetMapping("/application/send/{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String filename, Integer folder) {
+        Resource file = localApplicationService.loadFile(filename, folder.toString());
+        return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                    .body(file);
     }
 }

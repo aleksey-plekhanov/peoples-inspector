@@ -20,4 +20,9 @@ public interface FileRepository extends JpaRepository<File, Integer> {
             "from File f inner join f.type t " +
             "where t.typeName = :typeName")
     List<File> findByTypeName(String typeName);
+
+    @NonNull
+    @Query(value = "select \"Путь\" from public.file " +
+            "where id_application = ?1", nativeQuery = true)
+    List<String> findByApplication(Integer applicationId);
 }

@@ -8,13 +8,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 import traffic_id.demo.model.User;
+import traffic_id.demo.model.Application;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class ApplicationDto {
 
-    private Integer applicationId;
+    private Integer id;
     private User user;
 
     @NotNull
@@ -43,7 +44,7 @@ public class ApplicationDto {
 
     public ApplicationDto(Integer applicationId, User user, String information, Date dateViolation, Date dateArrive, 
     String title, String district, String address, String commentary, String status, String[] violations) {
-        this.applicationId = applicationId;
+        this.id = applicationId;
         this.user = user;
         this.information = information;
         this.dateViolation = dateViolation;
@@ -66,15 +67,28 @@ public class ApplicationDto {
         this.violations = Arrays.asList(violations);
     }
 
+    public ApplicationDto(Application application) {
+        this.id = application.getId();
+        this.user = application.getUser();
+        this.information = application.getInformation();
+        this.dateViolation = application.getDateViolation();
+        this.dateArrive = application.getDateArrive();
+        this.title = application.getTitle();
+        this.district = application.getDistrict().getDistrictName();
+        this.address = application.getAddress();
+        this.commentary = application.getCommentary();
+        this.status = application.getStatus().getStatusName();
+    }
+
     public ApplicationDto() {
     }
 
-    public void setApplicationId(Integer applicationId) {
-        this.applicationId = applicationId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Integer getApplicationId() {
-        return applicationId;
+    public Integer getId() {
+        return id;
     }
 
     public void setUser(User user) {

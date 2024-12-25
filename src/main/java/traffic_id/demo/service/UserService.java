@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import traffic_id.demo.repository.UserRepository;
+import traffic_id.demo.controller.UserController;
 import traffic_id.demo.exceptions.EmailAlreadyExistException;
 import traffic_id.demo.exceptions.LoginAlreadyExistException;
 import traffic_id.demo.exceptions.PasswordIncorrectException;
@@ -170,5 +173,19 @@ public class UserService {
         moderator.getUser().getData().setRoles("ROLE_USER");
         
         return true;
+    }
+
+    public Resource loadAvatar(String fileName, String folder) {
+        return fileService.loadAvatarFile(fileName, folder);
+    }
+
+    public String getAvatar(String path, String folder)
+    {
+        if (path == null || path == "")
+            return null;
+            
+        return MvcUriComponentsBuilder.fromMethodName(UserController.class, "getAvatar", fileService.getFileName(path), folder)
+                                        .build()
+                                        .toString();
     }
 }

@@ -91,21 +91,23 @@
         <form th:object="${localApplication}" method="POST" enctype="utf8">
           <div >
             <div class="form-group" style="margin: 0 auto;">
+              <input th:field="*{title}" hidden></input>
               <label th:text="*{title}"></label>
               <div class="lineInformation">
                 <div th:value="*{id}" th:text="*{id} ? ('№ ' + *{id}) : '№'" class="number"></div>
                 <input th:field="*{id}" hidden></input>
-                <div th:text="*{status?.statusName}" class="status">Одобрено</div>
+                <div th:text="*{status}" class="status">Одобрено</div>
                 <div th:text="${#dates.format(localApplication.dateArrive, 'dd.MM.yyyy')}" class="date"></div>
               </div>
             </div>
             <div class="form-group" style="margin: 0 auto;">
               <label for="dateViolation">Дата и время происшествия</label>
+              <input th:field="*{dateViolation}" hidden></input>
               <input th:value="${#dates.format(localApplication.dateViolation, 'dd.MM.yyyy HH:mm')}" class="form-control" name="dateViolation" readonly>
             </div>
             <div class="form-group" style="margin: 0 auto;">
               <label for="district">Район</label>
-              <input th:value="*{district?.districtName}" class="form-control" name="district" readonly>
+              <input th:value="*{district}" class="form-control" name="district" readonly>
             </div>
             <div class="form-group" style="margin: 0 auto;">
               <label for="address">Приблизительный адрес</label>

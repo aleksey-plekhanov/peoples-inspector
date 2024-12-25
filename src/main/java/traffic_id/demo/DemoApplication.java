@@ -18,7 +18,7 @@ public class DemoApplication implements CommandLineRunner {
     private UserDataRepository userDataRepository;
 
     // Менять вручную
-    private static final boolean isDebug = true;
+    private static final boolean isDebug = false;
     // для создания билда: 
     // gradlew build && docker-compose build && docker-compose up -d
 
