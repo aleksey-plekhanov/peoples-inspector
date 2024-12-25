@@ -1,0 +1,42 @@
+interface UserRepository {
+    Optional<User> findByData(UserData data)
+}
+
+interface UserDataRepository {
+    UserData findByLogin(String login);
+    UserData findByEmail(String email);
+}
+
+interface ApplicationRepository {
+    Integer createApplication(Integer id_user, String title, String information, Date dateViolation, String district, String address, String status);
+    void moderateApplication(Integer id_app, Integer moderator, String commentary, String status);
+    void getApplicationData(Integer id_app, String[] filePath, String[] violations);
+    List<Application> findByUser(User user);
+    List<Application> findUncheckedApplications(Integer modertorId);
+}
+
+interface ModeratorInterface {
+    Moderator findLastActive(User user)
+}
+
+interface ApplicationViolationRepository {
+    void addViolations(Integer id_app, String[] violations);
+    List<ApplicationViolation> findByApplication(Application application);
+}
+
+interface DistrictRepository {
+    District findByDistrictName(String districtName);
+}
+
+interface FileRepository {
+    void addFile(Integer id_app, String path, String type);
+    List<File> findByTypeName(String typeName);
+}
+
+interface StatusRepository {
+    Status findByStatusName(String status); 
+}
+
+interface ViolationRepository {
+    Violation findByArticle(String article);
+}

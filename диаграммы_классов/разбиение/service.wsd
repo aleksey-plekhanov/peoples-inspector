@@ -1,0 +1,112 @@
+class ExcelReportService {
+    - applicationRepository: ApplicationRepository
+    + void generateExcelReport(HttpServletResponse response)
+}
+
+class CustomAuthenticationProvider {
+    - userDataRepository: UserDataRepository
+
+    + Authentication authenticate(final Authentication authentication)
+    + boolean supports(Class<?> authentication)
+    - List<GrantedAuthority> getAuthorities (String roles)
+}
+
+class FileService {
+    - applicationFileStorageLocation: Path
+    - avatarFileStorageLocation: Path
+    - fileRepository: FileRepository
+
+    + String saveAvatarFile(MultipartFile file, String folder)
+    + void saveApplicationFiles(MultipartFile[] files, String folder)
+    + Boolean saveApplicationFilesIntoDB(MultipartFile[] files, Integer idData)
+    + Resource loadFile(String fileName, String folder)
+    + MultipartFile[] convertStringsToMultipartFiles(String[] paths)
+    + List<String> getAllFiles(String applicationFolder)
+}
+
+class LocalApplicationService {
+    - applicationRepository: ApplicationRepository 
+    - fileRepository: FileRepository
+    - applicationViolationRepository: ApplicationViolationRepository
+    - districtRepository: DistrictRepository
+    - violationRepository: ViolationRepository
+    - userService: UserService
+    - fileService: FileService
+
+    + ApplicationDto getApplicationDto(Application application)
+    + void sendApplicationDto(ApplicationDto applicationDto, MultipartFile[] files, String status)
+    + void sendCheckedApplication(Application application, String status) 
+    + List<Application> getAllApplications()
+    + List<Application> getAllUncheckedApplications()
+    + Application findApplicationById(Integer applicationId)
+    + List<District> getAllDistricts()
+    + List<Violation> getAllViolations()
+    + List<Application> getAllUserApplications()
+    + List<ApplicationViolation> getAllApplicationViolations()
+    + List<Violation> getApplicationViolations(Application application)
+    + List<String> getApplicationFiles(Application application)
+    + Boolean isUserOwnApplication(Application application)
+    + Boolean isModeratorHasRole()
+    + ResponseEntity<Resource> downloadFile(String file, Integer applicationId)
+}
+
+class MyUserDetailsService {
+    - userDataRepository: UserDataRepository
+
+    - List<GrantedAuthority> getAuthorities (String roles)
+    + UserDetails loadUserByUsername(String login)
+}
+
+class UserService {
+    - userRepository: UserRepository 
+    - userDataRepository: UserDataRepository
+    - fileService: FileService
+
+    + User registerNewUserAccount(UserDto userDto, PasswordDto passwordDto)
+    + User editUserAccount(UserDto userDto, MultipartFile file)
+    + boolean emailExists(String email)
+    + boolean loginExists(String login)
+    + User findUserById(Integer userId)
+    + User findUserByLogin(String login)
+    + List<User> allUsers()
+    + User getUser()
+    + Boolean isModeratorHasRole()
+    + Moderator findModeratorById(Integer moderatorId)
+    + Moderator findModeratorByUser(User user)
+    + List<Moderator> allModerators()
+    + boolean addModerator(Integer userId)
+    + boolean removeModerator(Integer moderatorId)
+}
+
+interface UserDataRepository {
+    UserData findByLogin(String login);
+    UserData findByEmail(String email);
+}
+
+interface DistrictRepository {
+    District findByDistrictName(String districtName);
+}
+
+interface ApplicationRepository {
+    Integer createApplication(Integer id_user, String title, String information, Date dateViolation, String district, String address, String status);
+    void moderateApplication(Integer id_app, Integer moderator, String commentary, String status);
+    void getApplicationData(Integer id_app, String[] filePath, String[] violations);
+    List<Application> findByUser(User user);
+    List<Application> findUncheckedApplications(Integer modertorId);
+}
+
+interface FileRepository {
+    void addFile(Integer id_app, String path, String type);
+    List<File> findByTypeName(String typeName);
+}
+
+MyUserDetailsService -- UserDataRepository: "относится"
+CustomAuthenticationProvider -- UserDataRepository: "относится"
+UserService -- UserDataRepository: "относится"
+ExcelReportService -- ApplicationRepository: "относится"
+UserService -- LocalApplicationService: "относится"
+FileService -- LocalApplicationService: "относится"
+ApplicationRepository -- LocalApplicationService: "относится"
+DistrictRepository -- LocalApplicationService: "относится"
+
+FileRepository -- LocalApplicationService: "относится"

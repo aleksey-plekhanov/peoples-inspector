@@ -1,0 +1,91 @@
+class AdminController {
+    - userService: UserService
+
+    + List<User> userList()
+    + String getUser(Integer userId, Model model)
+    + List<Moderator> moderatorList()
+    + ResponseEntity<String> addModerator(Integer userId)
+    + ResponseEntity<String> removeModerator(Integer moderatorId)
+    + String getModerator(Integer moderatorId, Model model)
+}
+
+class AuthController {
+    - userService: UserService
+
+    + String login(Model model)
+    + String userForm(Model model)
+    + String userSubmit(UserDto userDto, BindingResult resultUserDto, PasswordDto passwordDto, BindingResult resultPasswordDto, Model model)
+}
+
+class ModeratorController {
+    - userService: UserService
+
+    + String userList(Model model)
+    + String getUser(Integer userId, Model model)
+}
+
+class UserController {
+    - userService: UserService
+
+    + String getUserAccount(Model model)
+    + String editUserAccount(MultipartFile file, UserDto userDto, BindingResult result, Model model)
+}
+
+class UserService {
+    - userRepository: UserRepository 
+    - userDataRepository: UserDataRepository
+    - moderatorRepository: ModeratorRepository
+
+    + User registerNewUserAccount(UserDto userDto, PasswordDto passwordDto)
+    + User editUserAccount(UserDto userDto, MultipartFile file)
+    + boolean emailExists(String email)
+    + boolean loginExists(String login)
+    + User findUserById(Integer userId)
+    + User findUserByLogin(String login)
+    + List<User> allUsers()
+    + User getUser()
+    + Boolean isModeratorHasRole()
+    + Moderator findModeratorById(Integer moderatorId)
+    + Moderator findModeratorByUser(User user)
+    + List<Moderator> allModerators()
+    + boolean addModerator(Integer userId)
+    + boolean removeModerator(Integer moderatorId)
+}
+
+class User {
+    # id: Integer
+    surname: String
+    name: String
+    patronymic: String
+    data: UserData
+    registration: Date
+}
+
+class UserData {
+    # userDataId: Integer
+    login: String
+    password: String
+    email: String
+    avatar: String
+    passwordConfirm: String
+    roles: String
+    user: User
+}
+
+class Moderator {
+    # moderatorId: Integer
+    user: User
+    beginPost: Date
+    endPost: Date
+}
+
+AdminController "1" -- "1" UserService: "использует"
+AuthController "1" -- "1" UserService: "использует" 
+ModeratorController "1" -- "1" UserService: "использует"
+UserController "1" -- "1" UserService: "использует"
+
+UserService "1" -- "0..*" User: "управляет"
+User "1" -- "1" UserData: "имеет"
+
+Moderator "1" -- "1" User: "представляет"
+Moderator "1" -- "0..*" UserService: "использует"

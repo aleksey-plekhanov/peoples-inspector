@@ -1,0 +1,90 @@
+class Application {
+    # applicationId: Integer
+    user: User
+    title: String
+    information: String
+    dateArrive: Date
+    dateViolation: Date
+    district: District
+    address: String
+    status: Status
+    moderator: Moderator
+    commentary: String
+    dateCheck: Date
+}
+
+class ApplicationViolation {
+    # ApplicationViolationId: Integer
+    application: Application
+    violation: dateViolation
+}
+
+class District {
+    # districtName: String
+}
+
+class File {
+    # fileId: Integer
+    application: Application
+    path: String
+    type: FileType
+}
+
+class FileType {
+    # typeName: String
+}
+
+class Moderator {
+    # moderatorId: Integer
+    user: User
+    beginPost: Date
+    endPost: Date
+}
+
+class Status {
+    # statusName: String
+}
+
+class User {
+    # id: Integer
+    surname: String
+    name: String
+    patronymic: String
+    data: UserDate
+    registration: Date
+}
+
+class UserData {
+    # userDataId: Integer
+    login: String
+    password: String
+    email: String
+    avatar: String
+    passwordConfim: String
+    roles: String
+    user: User
+}
+
+class Violation {
+    # arcticle: String
+    name: String
+    type: ViolationType
+    punishment: String
+}
+
+class ViolationType {
+    # typeName: String
+}
+
+Application "1" -- "0..*" ApplicationViolation: "содержит"
+Application "1" -- "0..*" District: "содержит" 
+Application "1" -- "0..*" Status: "имеет"
+Application "1" -- "0..*" Moderator: "назначен"
+Application "1" -- "0..*" "File": "относится"
+
+Moderator "1" -- "0..*" User: "является"
+UserData "1" -- "0..*" User: "принадлежит"
+
+Violation "1" -- "0..*" ViolationType: "определяет"
+ApplicationViolation "1" -- "0..*" Violation: "содержит"
+"File" "1" -- "0..*" FileType: "имеет"
