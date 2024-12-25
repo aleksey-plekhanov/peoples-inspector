@@ -111,6 +111,10 @@ public class LocalApplicationService {
         return applicationRepository.findByUser(userService.getUser());
     }
 
+    public Boolean isTitleExist(String title) {
+        return (applicationRepository.findByTitle(title) != null);
+    }
+
     public List<File> getAllApplicationDataByType(String type) {
         String rusType = "";
         switch (type)
@@ -159,5 +163,5 @@ public class LocalApplicationService {
 
     public ResponseEntity<Resource> downloadFile(String file, Integer applicationId) {
         return fileService.downloadFile(file, applicationId);
-    
+    }
 }

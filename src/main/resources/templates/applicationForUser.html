@@ -92,6 +92,7 @@
             <div class="form-group" style="margin: 0 auto;">
               <label for="titleName">Название</label>
               <input th:field="*{title}" type="text" class="form-control" id="titleName" placeholder="Введите название заявления" required>
+              <err th:errors="*{title}" class="text-danger" th:if="${#fields.hasErrors('title')}"></err>
             </div>
             <div class="form-group" style="margin: 0 auto;">
               <label for="dateViolation">Дата и время происшествия</label>

@@ -70,6 +70,10 @@ public class AdminController {
 
     @GetMapping("/moderator/remove/{moderatorId}")
     public ResponseEntity<String> removeModerator(@PathVariable Integer moderatorId) {
+        if (userService.findModeratorById(moderatorId) == null) {
+            return ResponseEntity.badRequest().body("Данного модератора не существует");
+        }
+
         if (!userService.removeModerator(moderatorId)) {
             return ResponseEntity.badRequest().body("Данный модератор уже снят с должности");
         }

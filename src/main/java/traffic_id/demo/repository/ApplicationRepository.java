@@ -22,6 +22,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     void getApplicationData(Integer id_app, String[] filePath, String[] violations);
 
     List<Application> findByUser(User user);
+    Application findByTitle(String title);
 
     @Query(value = "select * from public.application " +
                 "where \"Статус\" = 'На рассмотрении' " +

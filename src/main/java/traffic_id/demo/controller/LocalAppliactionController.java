@@ -114,6 +114,15 @@ public class LocalAppliactionController {
     @PostMapping("/user/application/send")
     public String sendApplicationForUser(@Validated @ModelAttribute ApplicationDto applicationDto, @RequestParam MultipartFile[] files, BindingResult result, Model model) {
         unsendApplication = null;
+        if (localApplicationService.isTitleExist(applicationDto.getTitle())) {
+            result.rejectValue("title", null, "Заявление с таким названием уже существует");
+            model.addAttribute("applicationDto", applicationDto);
+            model.addAttribute("applications", localApplicationService.getAllUserApplications());
+            model.addAttribute("districts", localApplicationService.getAllDistricts());
+            model.addAttribute("violations", localApplicationService.getAllViolations());
+            return "applicationForUser";
+        }
+
         localApplicationService.sendApplicationDto(applicationDto, files, "На рассмотрении");
         return "redirect:/user/application";
     }
@@ -151,13 +160,5 @@ public class LocalAppliactionController {
     @GetMapping("/application/download/{applicationId}/{file}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Integer applicationId, @PathVariable String file) {
         return localApplicationService.downloadFile(file, applicationId);
-    }
-
-    @GetMapping("/application/send/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename, Integer folder) {
-        Resource file = localApplicationService.loadFile(filename, folder.toString());
-        return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                    .body(file);
     }
 }
