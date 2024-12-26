@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Народный инспектор - Личный кабинет</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="../static/img/favicon.png" rel="icon" th:href="@{/img/favicon.png}">
+  <link href="../static/img/apple-touch-icon.png" rel="apple-touch-icon" th:href="@{/img/apple-touch-icon.png}">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin th:href="@{https://fonts.gstatic.com}">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"
+    th:href="@{https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap}">
+
+  <!-- Vendor CSS Files -->
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+    th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+  <link href="../static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"
+    th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}">
+  <link href="../static/vendor/aos/aos.css" rel="stylesheet" th:href="@{/vendor/aos/aos.css}">
+  <link href="../static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet"
+    th:href="@{/vendor/glightbox/css/glightbox.min.css}">
+  <link href="../static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"
+    th:href="@{/vendor/swiper/swiper-bundle.min.css}">
+
+  <!-- Main CSS File -->
+  <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body class="starter-page-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div
+      class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" th:href="@{/}" class="logo d-flex align-items-center me-auto me-xl-0">
+        <h1>Народный инспектор</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html#hero" th:href="@{/#hero}">Главная</a></li>
+          <li><a href="user.html" th:href="@{/user}">Личный кабинет</a></li>
+          <li><a href="index.html#faq" th:href="@{/#faq}">FAQ</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+      <a class="btn-getstarted" href="applicationForUser.html" th:href="@{/user/application}">Добавить правонарушение</a>
+    </div>
+  </header>
+
+  <main class="main">
+    <form th:action="@{/user/save}" th:object="${userDto}" method="POST" enctype="multipart/form-data">
+      <div class="page-title light-background">
+        <h1>Личный кабинет</h1>
+        <div class="container my-5">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="text-center mb-4" style="margin-top: 30%;">
+                <!-- Переделать -->
+                <img th:if="*{avatar}" id="preview1" th:src="@{${urlAvatar}}" th:alt="missingAvatar" class="profile-image">
+                <img th:unless="*{avatar}" id="preview2" src="../static/img/emptyProfile.png" th:src="@{img/emptyProfile.png}" th:alt="emptyAvatar" class="profile-image">
+                <div class="mt-3">
+                  <label class="btn-lk" for="file-upload">Загрузить файл</label>
+                  <input type="file" name="file" id="file-upload" class="file-upload" accept="image/*"></input>
+                  <input th:field="*{avatar}" id="avatar" type="text" name="avatar" hidden/>
+                  <button class="btn-lk" id="file-delete" th:formaction="@{/user/avatar/delete}">Удалить фото</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <form>
+                <div class="form-group">
+                  <label for="lastName">Фамилия</label>
+                  <input th:field="*{surname}" type="text" class="form-control" id="lastName" placeholder="Введите фамилию" required>
+                  <err th:errors = "*{surname}" class="text-danger"
+                  th:if="${#fields.hasErrors('surname')}"></err>
+                </div>
+                <div class="form-group">
+                  <label for="firstName">Имя</label>
+                  <input th:field="*{name}" type="text" class="form-control" id="firstName" placeholder="Введите имя" required>
+                  <err th:errors = "*{name}" class="text-danger"
+                  th:if="${#fields.hasErrors('name')}"></err>
+                </div>
+                <div class="form-group">
+                  <label for="patronymic">Отчество (при наличии)</label>
+                  <input th:field="*{patronymic}" type="text" class="form-control" id="patronymic" placeholder="Введите отчество">
+                  <err th:errors = "*{patronymic}" class="text-danger"
+                  th:if="${#fields.hasErrors('patronymic')}"></err>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input th:field="*{email}" type="email" class="form-control" id="email" placeholder="Введите email" required>
+                  <err th:errors = "*{email}" class="text-danger"
+                  th:if="${#fields.hasErrors('email')}"></err>
+                </div>
+                <div class="form-group">
+                  <label for="login">Логин</label>
+                  <input th:field="*{login}" type="text" class="form-control" id="login" placeholder="Введите логин" required>
+                  <err th:errors = "*{login}" class="text-danger"
+                  th:if="${#fields.hasErrors('login')}"></err>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-lk">Сохранить изменения</button>
+        <button type="submit" class="btn-lk" style="background-color: red;" th:formaction="@{/logout}">Выйти из аккаунта</button>
+    </form>
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" th:href="@{/}" class="logo d-flex align-items-center">
+            <span class="sitename">Народный инспектор</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>г. Астрахань, АГТУ</p>
+            <p><strong>Email:</strong> <span>info@peoples-inspector.ru</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href="https://astu.org" th:href="@{https://astu.org}"><i class="bi bi-buildings"></i></a>
+            <a href="https://t.me/aleksey_plekhanov" th:href="@{https://t.me/aleksey_plekhanov}"><i
+                class="bi bi-bug"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Разделы сайта</h4>
+          <ul>
+            <li><a href="index.html#hero" th:href="@{/#hero}">Главная</a></li>
+            <li><a href="index.html#about" th:href="@{/#about}">О портале</a></li>
+            <li><a href="user.html" th:href="@{/user}">Личный кабинет</a></li>
+            <li><a href="applicationForUser.html" th:href="@{/user/application}">Заявить о правонарушении</a></li>
+            <li><a href="index.html#faq" th:href="@{/#faq}">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span> Разработан в рамках дисциплины "Командный проект" - Плеханов, Самодуров, Таргачева</span></p>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" th:href="@{#}" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"
+    th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script src="../static/vendor/php-email-form/validate.js" th:src="@{vendor/php-email-form/validate.js}"></script>
+  <script src="../static/vendor/aos/aos.js" th:src="@{vendor/aos/aos.js}"></script>
+  <script src="../static/vendor/glightbox/js/glightbox.min.js"
+    th:src="@{vendor/glightbox/js/glightbox.min.js}"></script>
+  <script src="../static/vendor/swiper/swiper-bundle.min.js" th:src="@{vendor/swiper/swiper-bundle.min.js}"></script>
+  <script src="../static/vendor/purecounter/purecounter_vanilla.js"
+    th:src="@{vendor/purecounter/purecounter_vanilla.js}"></script>
+
+  <!-- Main JS File -->
+  <script>
+    var reader = new FileReader();
+    reader.onload = function(r_event) {
+      if (document.getElementById('avatar').getAttribute('value') == '')
+        document.getElementById('preview2').setAttribute('src', r_event.target.result);
+      else
+      document.getElementById('preview1').setAttribute('src', r_event.target.result);
+    }
+
+    document.getElementsByName('file')[0].addEventListener('change', function(event) {
+      reader.readAsDataURL(this.files[0]);
+    });
+  </script>
+  <script src="../static/js/main.js" th:src="@{js/main.js}"></script>
+
+</body>
+
+</html>

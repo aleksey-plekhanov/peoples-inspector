@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+  traffic_db:
+    container_name: PostgreSQL
+    restart: always
+    image: postgres
+    ports:
+      - "127.0.0.1:15432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg_traffic:/var/lib/postgresql/data
+      #- ./src/main/resources/db/migration/V1__backup-1.1.sql:/docker-entrypoint-initdb.d/1_traffic_offensive.sql
+      #- ./src/main/resources/db/migration/V1.1__inserts.sql:/docker-entrypoint-initdb.d/2_traffic_offensive_inserts.sql
+
+  app:
+    restart: always
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on: 
+      - traffic_db
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://traffic_db:5432/${POSTGRES_DB}'
+      #SPRING_FLYWAY_URL: 'jdbc:postgresql://traffic_db:5432/${POSTGRES_DB}'
+      JAVA_OPTS: '-Xmx512m'
+    volumes:
+      - inspector-data:/var/lib/private/applications
+
+
+  # pgadmin4:
+  #   container_name: pgAdmin4
+  #   restart: always
+  #   image: dpage/pgadmin4:latest
+  #   ports:
+  #     - "5050:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+  #   depends_on:
+  #     - postgresql
+
+  # apache:
+  #   container_name: Apache
+  #   image: httpd:latest
+  #   ports:
+  #     - 8073:80
+  #   volumes:
+  #     - apache-data:/usr/local/apache2/htdocs
+  #   depends_on:
+  #     - postgresql
+
+volumes:
+  pg_traffic:
+  inspector-data:
+  # pgadmin-data:
+  # apache-data:

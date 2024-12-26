@@ -1,0 +1,127 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 1em sans-serif;
+}
+
+body {
+    display: flex;
+    background-image: url('../../images/auth/main.png');
+    background-size: cover;
+    background-position: center;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.wrapper {
+    min-width: 50vh;
+    background-color: black;
+    border-radius: 40px;
+    padding: 30px 40px;
+    opacity: .8;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px rgb(0, 0, 0, .2);
+}
+
+.wrapper h1 {
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    color: white;
+}
+
+.wrapper p, a {
+    font-size: 16px;
+    text-align: center;
+}
+
+.wrapper err {
+    font-size: 16px;
+    color: #fd1919;
+}
+
+.wrapper .input-box {
+    width: 100%;
+    height: 100%;
+    margin: 20px 0;
+    position: relative;
+}
+
+.wrapper input {
+    border: 2px solid rgb(0, 136, 255 .2);
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: black;
+    padding: 20px 45px 20px 20px;
+}
+
+.wrapper .btn {
+    border: 2px solid red;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    border-radius: 45px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    background-color: #fd1919;
+    color: white;
+    transition: background-color 0.3s, transform 0.3s; /* Плавная анимация */
+}
+
+.wrapper .btn:hover {
+    transform: scale(1.03);
+}
+
+.wrapper .remember_password {
+    display: flex;
+    justify-content: space-between;
+    margin: -15px 0 15px;
+    margin-top: 10px;
+    color: white;
+    font-size: 14px;
+}
+
+.wrapper .remember_password input {
+    margin-right: 8px;
+}
+
+.wrapper .remember_password a {
+    font-size: 14px;
+    color: #ff2b2b;
+    text-decoration: none;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.wrapper .remember_password a:hover {
+    text-decoration: underline;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.input-box input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(203, 36, 36, 0.922);
+    border-radius: 25px;
+    outline: none;
+}
+
+.register-link p {
+    font-size: 12px;
+    color: white; 
+}
+
+.register-link a {
+    font-size: 12px;
+    color: #ff2b2b; 
+    text-decoration: none;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}

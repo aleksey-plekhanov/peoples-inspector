@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Письмо для фиксации заявления</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    .container {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #ffffff;
+        border-radius: 15px;
+        margin: 10%;
+        padding: 5%;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+<body>
+    <form th:object="${localApplication}">
+        <div class="container">
+            <h1 th:text="'Заявление №' + *{id} + ' | ' + *{title}">Заявление №123 | Проехал на красный свет</h1>
+            <hr></hr>
+    
+            <h3>Дата и время происшествия: </h3>
+            <label th:text="${#dates.format(localApplication.dateViolation, 'dd.MM.yyyy HH:mm')}">12.12.2024</label>
+    
+            <h3>Район: </h3>
+            <label th:text="*{district}">Кировский</label>
+    
+            <h3>Приблизительный адрес: </h3>
+            <label th:text="*{address}">г. Астрахань, ул. Пушкина 7г</label>
+    
+            <div class="form-group" style="margin: 0 auto;">
+                <h3>Список правонарушений: </h3>
+                <label name="violations" id="violations">
+                    <label th:each="viol : ${violations}" class="form-control" th:text="${viol.article} + ' ' + ${viol.name}">
+                        <br>
+                    </label>
+                </label>
+            </div>
+
+            <h3>Описание:</h3>
+            <label th:text="*{information}"></label>
+        </div>
+    </form>
+</body>
+</html>
