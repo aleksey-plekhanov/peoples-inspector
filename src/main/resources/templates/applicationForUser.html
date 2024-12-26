@@ -53,28 +53,28 @@
     <div class="page-title light-background">
     <div class="row" style=" background-color: white;">
       <div class="col-md-4" style="background-color: #f3f9ff;">
-        <div class="row" style="padding: 3%; border-radius: 50px; margin-top: 10px;">
-          <form th:action="@{/user/application/search}" method="GET" enctype="utf8">
+        <form th:object="${applications}" method="GET" enctype="utf8">
+          <div class="row" style="padding: 3%; border-radius: 50px; margin-top: 10px;">
             <div class="container" style="display: flex; justify-content: space-between;">
               <input type="text" class="container-input" name="description" id="description" placeholder="Поиск по заявлениям" style="height: 15%; width: 100%; margin-right: 5px;">
               <div style="margin-left: 5px;">
-                <button type="submit" class="btn-search">
+                <button th:disabled="${#lists.isEmpty(applications)}" type="submit" class="btn-search" th:formaction="'/application/search/create'">
                   <i class="bi bi-search"></i>
                 </button>
               </div>
               <div style="margin-left: 5px;">
-                <button type="submit" class="btn-search" th:formaction="'/save-post/'">
+                <input th:value="${sort}" name="typeSort" id="typeSort" hidden>
+                <button th:disabled="${#lists.isEmpty(applications)}" type="submit" class="btn-search" th:formaction="'/application/sort/create'">
                   <i class="bi bi-chevron-expand"></i>
                 </button>
               </div>
             </div>
-          </form>
-        </div>
+          </div>
         
-        <form th:object="${applications}" method="GET">
           <div th:each="app : ${applications}" class="application-list" >
             <button class="application-item" th:formaction="'/user/application/'+${app.id}">
               <div class="row mainblock">
+                <input th:value="${app.id}" name="applicationId" id="applicationId" hidden>
                 <div th:text="'№ ' + ${app.id}" name="appId" class="number"></div>
                 <div th:text="${app.title}" class="name"></div>
               </div>

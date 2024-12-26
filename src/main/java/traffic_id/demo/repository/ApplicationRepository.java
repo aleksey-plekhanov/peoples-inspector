@@ -22,10 +22,21 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     void getApplicationData(Integer id_app, String[] filePath, String[] violations);
 
     List<Application> findByUser(User user);
+
+    @Query(value = "select * from public.application " +
+                "where upper(\"Название\") LIKE concat('%',upper(?2),'%') " +
+                "and \"Заявитель\" = ?1", nativeQuery = true)
+    List<Application> findByUserAndTitleFragment(Integer userId, String titleFragment);
     Application findByTitle(String title);
 
     @Query(value = "select * from public.application " +
                 "where \"Статус\" = 'На рассмотрении' " +
                 "and \"Заявитель\" <> ?1", nativeQuery = true)
     List<Application> findUncheckedApplications(Integer modertorId);
+
+    @Query(value = "select * from public.application " +
+                "where \"Статус\" = 'На рассмотрении' " +
+                "and upper(\"Название\") LIKE concat('%',upper(?2),'%') " +
+                "and \"Заявитель\" <> ?1", nativeQuery = true)
+    List<Application> findUncheckedApplications(Integer modertorId, String titleFragment);
 }

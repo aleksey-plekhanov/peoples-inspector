@@ -1,6 +1,7 @@
 package traffic_id.demo.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,6 +95,20 @@ public class LocalApplicationService {
         return applicationRepository.findUncheckedApplications(userService.getUser().getId());
     }
 
+    public List<Application> getAllUncheckedApplications(String titleFragment) {
+        return applicationRepository.findUncheckedApplications(userService.getUser().getId(), titleFragment);
+    }
+
+    public List<Application> sortApplicationsByDateArrive(List<Application> apps, String sort) {
+        Comparator<Application> compareByDateArrive = Comparator.comparing(Application::getDateArrive);
+        if (sort.equals("desc"))
+            compareByDateArrive = Comparator.comparing(Application::getDateArrive, (s1, s2) -> {
+                return s2.compareTo(s1);
+            });
+        apps.sort(compareByDateArrive);
+        return apps;
+    }
+
     public Application findApplicationById(Integer applicationId) {
         Optional<Application> applicationFromDb = applicationRepository.findById(applicationId);
         return applicationFromDb.orElse(null);
@@ -109,6 +124,10 @@ public class LocalApplicationService {
 
     public List<Application> getAllUserApplications() {
         return applicationRepository.findByUser(userService.getUser());
+    }
+
+    public List<Application> getAllUserApplications(String titleFragment) {
+        return applicationRepository.findByUserAndTitleFragment(userService.getUser().getId(), titleFragment);
     }
 
     public Boolean isTitleExist(String title) {

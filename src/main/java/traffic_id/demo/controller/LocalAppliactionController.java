@@ -37,17 +37,20 @@ public class LocalAppliactionController {
     private DefaultEmailService defaultEmailService;
 
     private ApplicationDto unsendApplication = null;
+    private Application uncheckedApplication = null;
 
     @GetMapping("/moderator/application")
     public String getAllUncheckedApplications(Model model) {
         if (!localApplicationService.isModeratorHasRole())
             return "redirect:/logout";
-        List<Application> apps = localApplicationService.getAllUncheckedApplications();
+        List<Application> apps = localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUncheckedApplications(), "desc");
         if (!apps.isEmpty()) {
             model.addAttribute("localApplication", new ApplicationDto(apps.get(0)));
+            model.addAttribute("sort", "desc");
             model.addAttribute("applications", apps);
             model.addAttribute("violations", localApplicationService.getApplicationViolations(apps.get(0)));
             model.addAttribute("files", localApplicationService.getApplicationFiles(apps.get(0)));
+            uncheckedApplication = apps.get(0);
         }
         else {
             model.addAttribute("localApplication", new Application());
@@ -61,8 +64,10 @@ public class LocalAppliactionController {
         if (!localApplicationService.isModeratorHasRole())
             return "redirect:/logout";
         Application application = localApplicationService.findApplicationById(applicationId);
+        uncheckedApplication = application;
         model.addAttribute("localApplication", new ApplicationDto(application));
-        model.addAttribute("applications", localApplicationService.getAllUncheckedApplications());
+        model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUncheckedApplications(), "desc"));
+        model.addAttribute("sort", "desc");
         model.addAttribute("violations", localApplicationService.getApplicationViolations(application));
         model.addAttribute("files", localApplicationService.getApplicationFiles(application));
         return "applicationForModerator";
@@ -105,7 +110,8 @@ public class LocalAppliactionController {
         else 
             model.addAttribute("applicationDto", new ApplicationDto());
 
-        model.addAttribute("applications", localApplicationService.getAllUserApplications());
+        model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUserApplications(), "asc"));
+        model.addAttribute("sort", "asc");
         model.addAttribute("districts", localApplicationService.getAllDistricts());
         model.addAttribute("violations", localApplicationService.getAllViolations());
         return "applicationForUser";
@@ -117,7 +123,8 @@ public class LocalAppliactionController {
         if (localApplicationService.isTitleExist(applicationDto.getTitle())) {
             result.rejectValue("title", null, "Заявление с таким названием уже существует");
             model.addAttribute("applicationDto", applicationDto);
-            model.addAttribute("applications", localApplicationService.getAllUserApplications());
+            model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUserApplications(), "asc"));
+            model.addAttribute("sort", "asc");
             model.addAttribute("districts", localApplicationService.getAllDistricts());
             model.addAttribute("violations", localApplicationService.getAllViolations());
             return "applicationForUser";
@@ -126,12 +133,6 @@ public class LocalAppliactionController {
         localApplicationService.sendApplicationDto(applicationDto, files, "На рассмотрении");
         return "redirect:/user/application";
     }
-
-    // @PostMapping("/user/draft")
-    // public String draftApplicationForUser(@Validated @ModelAttribute ApplicationDto applicationDto, BindingResult result, Model model) {
-    //     localApplicationService.sendApplicationDto(applicationDto, "Черновик");
-    //     return "redirect:/user";
-    // }
 
     @GetMapping("/user/application/{applicationId}")
     public String getApplicationForUser(@PathVariable Integer applicationId, @ModelAttribute ApplicationDto applicationDto, Model model) {
@@ -148,10 +149,76 @@ public class LocalAppliactionController {
             return "applicationForUser";
 
         model.addAttribute("localApplication", application);
-        model.addAttribute("applications", localApplicationService.getAllUserApplications());
+        model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUserApplications(), "asc"));
+        model.addAttribute("sort", "asc");
         model.addAttribute("violations", localApplicationService.getApplicationViolations(application));
         model.addAttribute("files", localApplicationService.getApplicationFiles(application));
         return "application";
+    }
+
+    @GetMapping("/application/search/{from}")
+    public String searchApplications(@PathVariable String from, @RequestParam String typeSort, @RequestParam String description, @RequestParam Integer applicationId, Model model) {
+        switch (from) {
+            case "create" -> {
+                model.addAttribute("applicationDto", new ApplicationDto());
+                model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUserApplications(description), typeSort));
+                model.addAttribute("sort", typeSort);
+                model.addAttribute("districts", localApplicationService.getAllDistricts());
+                model.addAttribute("violations", localApplicationService.getAllViolations());
+                return "applicationForUser";
+            }
+            case "moderate" -> {
+                model.addAttribute("localApplication", new ApplicationDto(uncheckedApplication));
+                model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUncheckedApplications(description), typeSort));
+                model.addAttribute("sort", typeSort);
+                model.addAttribute("violations", localApplicationService.getApplicationViolations(uncheckedApplication));
+                model.addAttribute("files", localApplicationService.getApplicationFiles(uncheckedApplication));
+                return "applicationForModerator";
+            }
+            case "view" -> {
+                Application application = localApplicationService.findApplicationById(applicationId);
+                model.addAttribute("localApplication", application);
+                model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUserApplications(description), typeSort));
+                model.addAttribute("sort", typeSort);
+                model.addAttribute("violations", localApplicationService.getApplicationViolations(application));
+                model.addAttribute("files", localApplicationService.getApplicationFiles(application));
+                return "application";
+            }
+            default -> {return "Нет роли " + from;}
+        }
+    }
+
+    @GetMapping("/application/sort/{from}")
+    public String sortApplications(@PathVariable String from, @RequestParam String typeSort, @RequestParam Integer applicationId, Model model) {
+        typeSort = typeSort.equals("asc") ? "desc" : "asc";
+        switch (from) {
+            case "create" -> {
+                model.addAttribute("applicationDto", new ApplicationDto());
+                model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUserApplications(), typeSort));
+                model.addAttribute("sort", typeSort);
+                model.addAttribute("districts", localApplicationService.getAllDistricts());
+                model.addAttribute("violations", localApplicationService.getAllViolations());
+                return "applicationForUser";
+            }
+            case "moderate" -> {
+                model.addAttribute("localApplication", new ApplicationDto(uncheckedApplication));
+                model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUncheckedApplications(), typeSort));
+                model.addAttribute("sort", typeSort);
+                model.addAttribute("violations", localApplicationService.getApplicationViolations(uncheckedApplication));
+                model.addAttribute("files", localApplicationService.getApplicationFiles(uncheckedApplication));
+                return "applicationForModerator";
+            }
+            case "view" -> {
+                Application application = localApplicationService.findApplicationById(applicationId);
+                model.addAttribute("localApplication", application);
+                model.addAttribute("applications", localApplicationService.sortApplicationsByDateArrive(localApplicationService.getAllUserApplications(), typeSort));
+                model.addAttribute("sort", typeSort);
+                model.addAttribute("violations", localApplicationService.getApplicationViolations(application));
+                model.addAttribute("files", localApplicationService.getApplicationFiles(application));
+                return "application";
+            }
+            default -> {return "Нет роли " + from;}
+        }
     }
 
     /**
